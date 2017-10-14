@@ -1,0 +1,173 @@
+<div class="container">
+
+	<br>
+	<br>
+
+	<div *ngIf="!auth.user">
+
+		<div *ngFor="let Year of Projects | async | reverse; let index = index">
+
+			<div class="card mb-3" [ngClass]="getCardColor(index)">
+				<div class="card-header text-white">
+					<h4 class="card-title display-4">Team Projects {{Year.$key}}</h4>
+				</div>
+				<ul class="list-group list-group-flush">
+					<div *ngFor="let Project of Year">
+						<li class="list-group-item">
+							<h3>{{Project.Text}}</h3>
+						</li>
+						<li *ngFor="let SubProject of Project.SubProjects" class="list-group-item">
+							{{SubProject.Text}}
+						</li>
+					</div>
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div *ngIf="auth.user">
+
+		<div *ngFor="let Year of Projects | async | reverse">
+
+			<div class="card mb-3">
+				<div class="card-header">
+				<div class="row">
+					<div class="col-10">
+						<h1 class="display-4">Team Projects {{Year.$key}}</h1>
+					</div>
+					<div class="col-2">
+					<div class="btn-group float-right">
+						<button class="btn btn-outline-danger" (click)="save(Year);">
+							<i class="fa fa-lg fa-save"></i>
+						</button>
+						<button class="btn btn-outline-danger" (click)="remove(Year.$key);">
+							<i class="fa fa-lg fa-trash"></i>
+						</button>
+					</div>
+					</div>
+				</div>
+				</div>
+
+				<ul class="list-group list-group-flush">
+					<div *ngFor="let Project of Year">
+						<li class="list-group-item">
+						<div class="row">
+							<div class="col-10">
+								<input type="text" [(ngModel)]="Project.Text" placeholder="Project Title" class="form-control">
+							</div>
+							<div class="col-2">
+							<div class="btn-group float-right">
+								<button class="btn btn-outline-danger" (click)="addProject(Year, Project);">
+									<i class="fa fa-lg fa-plus"></i>
+								</button>
+								<button class="btn btn-outline-danger" (click)="removeProject(Year, Project);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
+							</div>
+							</div>
+						</div>
+						</li>
+
+						<div *ngFor="let SubProject of Project.SubProjects">
+							<li class="list-group-item">
+							<div class="row">
+								<div class="col-10 form-group">
+									<textarea type="text" [(ngModel)]="SubProject.Text" placeholder="New Project"
+									class="form-control" rows="4"></textarea>
+								</div>
+								<div class="col-2">
+								<div class="btn-group float-right">
+									<button class="btn btn-outline-danger" (click)="addSubProject(Project.SubProjects, SubProject);">
+										<i class="fa fa-lg fa-plus"></i>
+									</button>
+									<button class="btn btn-outline-danger" (click)="removeSubProject(Project.SubProjects, SubProject);">
+										<i class="fa fa-lg fa-trash"></i>
+									</button>
+								</div>
+								</div>
+							</div>
+							</li>
+						</div>
+					</div>
+				</ul>
+			</div>
+
+		</div>
+
+		<hr>
+
+		<h1 class="display-3">Add New Project</h1>
+
+		<br>
+
+		<div class="alert alert-warning" role="alert">
+			Enter the school year only (no spaces), and not the "Team Projects" part. Ex: {{year}}-{{year+1}}.
+		</div>
+
+		<br>
+
+		<div class="card mb-3">
+			<div class="card-header">
+			<div class="row">
+				<div class="col-10">
+					<input type="text" [(ngModel)]="newYear.Term" placeholder="School Year" class="form-control">
+				</div>
+				<div class="col-2">
+					<button class="btn btn-outline-danger float-right" (click)="add();">
+						<i class="fa fa-lg fa-plus"></i>
+					</button>
+				</div>
+			</div>
+			</div>
+
+			<ul class="list-group list-group-flush">
+				<div *ngFor="let Project of newYear.Projects">
+					<li class="list-group-item">
+					<div class="row">
+						<div class="col-10">
+							<input type="text" [(ngModel)]="Project.Text" placeholder="Project Title" class="form-control">
+						</div>
+						<div class="col-2">
+						<div class="btn-group float-right">
+							<button class="btn btn-outline-danger" (click)="addProject(newYear.Projects, Project);">
+								<i class="fa fa-lg fa-plus"></i>
+							</button>
+							<button class="btn btn-outline-danger" (click)="removeProject(newYear.Projects, Project);">
+								<i class="fa fa-lg fa-trash"></i>
+							</button>
+						</div>
+						</div>
+					</div>
+					</li>
+
+					<div *ngFor="let SubProject of Project.SubProjects">
+						<li class="list-group-item">
+						<div class="row">
+							<div class="col-10 form-group">
+								<textarea type="text" [(ngModel)]="SubProject.Text" placeholder="New Project"
+								class="form-control" rows="4"></textarea>
+							</div>
+							<div class="col-2">
+							<div class="btn-group float-right">
+								<button class="btn btn-outline-danger" (click)="addSubProject(Project.SubProjects, SubProject);">
+									<i class="fa fa-lg fa-plus"></i>
+								</button>
+								<button class="btn btn-outline-danger" (click)="removeSubProject(Project.SubProjects, SubProject);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
+							</div>
+							</div>
+						</div>
+						</li>
+					</div>
+				</div>
+			</ul>
+		</div>
+
+
+
+	</div>
+
+</div>

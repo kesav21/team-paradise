@@ -1,0 +1,103 @@
+<div class="container">
+
+	<br>
+	<br>
+
+	<div *ngIf="!auth.user">
+
+		<div *ngFor="let Person of People | async; let index = index">
+			<div class="card mb-3">
+				<img class="card-img-top" [src]="Person.ImageURL" [alt]="Person.Name">
+				<div class="card-body">
+					<blockquote class="blockquote">
+						<p>{{Person.Quote}}</p>
+						<footer class="blockquote-footer">{{Person.Name}}</footer>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div *ngIf="auth.user">
+
+		<div *ngFor="let Person of People | async; let index = index">
+			<div class="card mb-3">
+				<div class="card-header">
+				<div class="row">
+					<div class="col-10">
+						<h1 class="display-4">{{Person.Name}}</h1>
+					</div>
+					<div class="col-2">
+					<div class="btn-group float-right">
+						<button class="btn btn-outline-danger" (click)="save(Person);">
+							<i class="fa fa-lg fa-save"></i>
+						</button>
+						<button class="btn btn-outline-danger" (click)="remove(Person.id);">
+							<i class="fa fa-lg fa-trash-o"></i>
+						</button>
+					</div>
+					</div>
+				</div>
+				</div>
+
+				<div class="card-body">
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" [(ngModel)]="Person.Name" id="name" placeholder="Name" class="form-control">
+					</div>
+
+					<div class="form-group">
+						<label for="image">Image URL</label>
+						<input type="text" [(ngModel)]="Person.ImageURL" id="image" placeholder="Image URL (use https)" class="form-control">
+					</div>
+
+					<div class="form-group">
+						<label for="quote">Quote</label>
+						<textarea [(ngModel)]="Person.Quote" id="quote" placeholder="Quote" class="form-control" rows="10"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br>
+		<hr>
+		<br>
+
+		<div class="card mb-3">
+			<div class="card-header">
+			<div class="row">
+				<div class="col-10">
+					<h1 class="display-4">Add Quote</h1>
+				</div>
+				<div class="col-2">
+				<div class="btn-group float-right">
+					<button class="btn btn-outline-danger" (click)="add();">
+						<i class="fa fa-lg fa-plus"></i>
+					</button>
+				</div>
+				</div>
+			</div>
+			</div>
+
+			<div class="card-body">
+				<div class="form-group">
+					<label for="name">Name</label>
+					<input type="text" [(ngModel)]="newPerson.Name" id="name" placeholder="Name" class="form-control">
+				</div>
+
+				<div class="form-group">
+					<label for="image">Image URL</label>
+					<input type="text" [(ngModel)]="newPerson.ImageURL" id="image" placeholder="Image URL (use https)" class="form-control">
+				</div>
+
+				<div class="form-group">
+					<label for="quote">Quote</label>
+					<textarea [(ngModel)]="newPerson.Quote" id="quote" class="form-control" placeholder="Quote" rows="10">
+					</textarea>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

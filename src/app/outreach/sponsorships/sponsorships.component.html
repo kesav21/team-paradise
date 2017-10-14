@@ -1,0 +1,176 @@
+<div class="container">
+
+	<br>
+
+	<h1 class="display-4">Sponsorships</h1>
+
+	<br>
+
+	<div *ngIf="!auth.user">
+
+		<div *ngFor="let Sponsorship of SponsorshipLevels | async">
+
+			<div class="card">
+				<div class="card-header">
+					<h2>{{Sponsorship.$key}}: {{Sponsorship.Description}}</h2>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li *ngFor="let Perk of Sponsorship.Perks" class="list-group-item">
+						{{Perk.Text}}
+					</li>
+				</ul>
+			</div>
+
+			<br>
+
+		</div>
+
+	</div>
+
+	<div *ngIf="auth.user">
+
+		<div *ngFor="let Level of SponsorshipLevels | async">
+
+			<div class="card">
+				<div class="card-header">
+				<div class="row">
+					<div class="col-10">
+					<div class="form-group">
+						<h2>{{Level.$key}}: {{Level.Description}}</h2>
+					</div>
+					</div>
+					<div class="col-2">
+					<div class="btn-group float-right">
+						<button class="btn btn-outline-danger" (click)="saveLevel(Level);">
+							<i class="fa fa-lg fa-save"></i>
+						</button>
+						<button class="btn btn-outline-danger" (click)="removeLevel(Level.$key);">
+							<i class="fa fa-lg fa-trash-o"></i>
+						</button>
+					</div>
+					</div>
+				</div>
+				</div>
+				<div class="card-body">
+					<div *ngFor="let Perk of Level.Perks">
+						<div class="row">
+							<div class="col-10">
+								<input type="text" [(ngModel)]="Perk.Text" placeholder="New Perk" class="form-control">
+							</div>
+							<div class="col-2">
+							<div class="btn-group float-right">
+								<button class="btn btn-outline-danger" (click)="addPerk(Level.Perks, Perk);">
+									<i class="fa fa-lg fa-plus"></i>
+								</button>
+								<button class="btn btn-outline-danger" (click)="removePerk(Level.Perks, Perk);">
+									<i class="fa fa-lg fa-trash-o"></i>
+								</button>
+							</div>
+							</div>
+						</div>
+
+						<br>
+					</div>
+				</div>
+			</div>
+
+			<br>
+
+		</div>
+
+	</div>
+
+	<h1 class="display-4">Our Sponsors</h1>
+
+	<br>
+
+	<div *ngIf="!auth.user">
+
+		<ul class="list-group">
+			<li *ngFor="let Sponsor of Sponsors | async" class="list-group-item">
+				<div class="row">
+					<div class="col-4">{{Sponsor.$key}}</div>
+					<div class="col-8">
+						<span class="float-right">
+							<img [src]="Sponsor.$value" style="max-height:400px; max-width: 400px" class="img-responsive img-thumbnail">
+						</span>
+					</div>
+				</div>
+			</li>
+		</ul>
+
+	</div>
+
+	<div *ngIf="auth.user">
+
+		<table class="table">
+			<thead>
+				<tr class="row">
+					<th class="col-3">Name</th>
+					<th class="col-7">Image URL</th>
+					<th class="col-2">
+						<span class="float-right">Actions</span>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let Sponsor of Sponsors | async" class="row">
+					<td class="col-3">
+						{{Sponsor.$key}}
+					</td>
+					<td class="col-7">
+						<input type="text" [(ngModel)]="Sponsor.$value" class="form-control">
+					</td>
+					<td class="col-2">
+						<div class="btn-group float-right">
+							<button class="btn btn-outline-danger" (click)="saveSponsor(Sponsor);">
+								<i class="fa fa-lg fa-save"></i>
+							</button>
+							<button class="btn btn-outline-danger" (click)="removeSponsor(Sponsor.$key);">
+								<i class="fa fa-lg fa-trash-o"></i>
+							</button>
+						</div>
+					</td>
+				</tr>
+				<tr class="row">
+					<td class="col-3">
+						<input type="text" [(ngModel)]="newSponsor.Name" placeholder="Sponsor Name" class="form-control">
+					</td>
+					<td class="col-7">
+						<input type="text" [(ngModel)]="newSponsor.ImageURL" placeholder="Sponsor Image" class="form-control">
+					</td>
+					<td class="col-2">
+						<div class="btn-group float-right">
+							<button class="btn btn-outline-danger" (click)="addSponsor();">
+								<i class="fa fa-lg fa-plus"></i>
+							</button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+	<br>
+
+	<h1 class="display-4">Tax Credit Donations</h1>
+
+	<br>
+
+	<h4>
+		<a href="http://webstores.activenetwork.com/school-software/paradise_valley_high/index.php?l=product_detail&p=354#.UiYX5GREiA1">
+			Make a Tax Credit Donation to Team Paradise!
+		</a>
+	</h4>
+
+	<br>
+
+	<h4>What is a Tax Credit donation?</h4>
+	<p>
+		A tax credit donation is a donation to a group or club that qualifies for an income tax deductible.
+		Any married couple can donate $400 and any one person can donate $200 to get a tax deductible.
+		This benefits both parties because you can donate to our robotics team and support us while also paying less in taxes.
+	</p>
+
+</div>

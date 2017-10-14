@@ -1,0 +1,84 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" href="/home">Team Paradise</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarText">
+		<ul class="navbar-nav mr-auto">
+			<li *ngFor="let dropdown of menu" class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{dropdown.title}}
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+					<a *ngFor="let button of dropdown.list" class="dropdown-item" [href]="button.url">
+						{{button.name}}
+					</a>
+				</div>
+			</li>
+			<li *ngFor="let button of buttons" class="nav-item">
+				<a class="nav-link" [href]="button.url">{{button.name}}</a>
+			</li>
+		</ul>
+		<span class="navbar-text">
+			<div *ngIf="!auth.user">
+				<button class="nav-link btn btn-outline-danger" (click)="login();">
+					Login
+				</button>
+			</div>
+			<div *ngIf="auth.user">
+				<button class="nav-link btn btn-outline-danger" (click)="logout();">
+					Logout
+				</button>
+			</div>
+		</span>
+	</div>
+</nav>
+
+
+
+
+<!-- <nav class="navbar navbar-toggleable-md navbar-light bg-faded sticky-top">
+
+	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<a class="navbar-brand" href="/home">
+		Team Paradise
+	</a>
+
+	<div class="collapse navbar-collapse" id="navbarText">
+
+		<ul class="navbar-nav mr-auto">
+
+			<li class="nav-item dropdown" *ngFor="let dropdown of menu">
+				<a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">
+					{{dropdown.title}}
+				</a>
+				<div class="dropdown-menu">
+					<a *ngFor="let button of dropdown.list" class="dropdown-item" [href]="button.url">{{button.name}}</a>
+				</div>
+			</li>
+
+			<li class="nav-item" *ngFor="let button of buttons">
+				<a class="nav-link" [href]="button.url">{{button.name}}</a>
+			</li>
+
+		</ul>
+
+		<div>
+			<div *ngIf="!auth.user">
+				<button class="nav-link btn btn-outline-danger" (click)="login();">
+					Login
+				</button>
+			</div>
+			<div *ngIf="auth.user">
+				<button class="nav-link btn btn-outline-danger" (click)="logout();">
+					Logout
+				</button>
+			</div>
+		</div>
+
+	</div>
+
+</nav> -->

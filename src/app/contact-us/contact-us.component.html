@@ -1,0 +1,141 @@
+<div class="container">
+<div *ngIf="SocialMedia">
+<div *ngIf="OfficerBoard">
+
+	<br>
+
+    <h1 class="display-4">Contact Us</h1>
+
+	<br>
+
+	<div *ngIf="!auth.user">
+
+    <div class="card">
+		<div class="card-header">
+			<h4>Connect with us on Social Media</h4>
+		</div>
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item" *ngFor="let Media of SocialMedia | async">
+            	{{Media.$key}}: <a href="{{Media.URL}}">{{Media.Text}}</a>
+			</li>
+		</ul>
+	</div>
+
+    <br>
+
+    <div class="card">
+		<div class="card-header">
+			<h4>Officer Board {{year}}-{{year + 1}}</h4>
+		</div>
+		<ul class="list-group list-group-flush">
+			<li *ngFor="let Officer of OfficerBoard | async" class="list-group-item">
+				{{Officer.$key}}: <a href="mailto:{{Officer.Email}}">{{Officer.Name}}</a>
+			</li>
+		</ul>
+	</div>
+
+	</div>
+
+	<div *ngIf="auth.user">
+
+    <div class="card">
+		<div class="card-header">
+			<h4>Connect with us on Social Media</h4>
+		</div>
+		<div class="card-body">
+			<div *ngFor="let Media of SocialMedia | async">
+				<div class="row">
+					<div class="col-2">
+						<h6>{{Media.$key}}</h6>
+					</div>
+					<div class="col-4">
+						<div class="form-group">
+							<input type="text" [(ngModel)]="Media.URL" class="form-control">
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="form-group">
+							<input type="text" [(ngModel)]="Media.Text" class="form-control">
+						</div>
+					</div>
+					<div class="col-3">
+						<div class="btn-group">
+							<button class="btn btn-outline-danger" (click)="saveMedia(Media);">
+								<i class="fa fa-lg fa-save"></i>
+							</button>
+							<button class="btn btn-outline-danger" (click)="removeMedia(Media.$key);">
+								<i class="fa fa-lg fa-trash"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div *ngIf="newMedia">
+			<div class="row">
+				<div class="col-3">
+					<input type="text" [(ngModel)]="newMedia.Name" placeholder="Name" class="form-control">
+				</div>
+				<div class="col-4">
+					<div class="form-group">
+						<input type="text" [(ngModel)]="newMedia.URL" placeholder="URL" class="form-control">
+					</div>
+				</div>
+				<div class="col-3">
+					<div class="form-group">
+						<input type="text" [(ngModel)]="newMedia.Text" placeholder="Display Text" class="form-control">
+					</div>
+				</div>
+				<div class="col-2">
+					<div class="btn-group">
+						<button class="btn btn-outline-danger" (click)="addMedia(newMedia);">
+							<i class="fa fa-lg fa-trash"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+
+    <br>
+
+    <div class="card">
+		<div class="card-header">
+			<h4>Officer Board {{year}}-{{year+1}}</h4>
+		</div>
+		<div class="card-body">
+			<div *ngFor="let Officer of OfficerBoard | async">
+				<div class="row">
+					<div class="col-2">
+						<h6>{{Officer.$key}}</h6>
+					</div>
+					<div class="col-4">
+						<div class="form-group">
+							<input type="text" [(ngModel)]="Officer.Name" class="form-control">
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="form-group">
+							<input type="text" [(ngModel)]="Officer.Email" class="form-control">
+						</div>
+					</div>
+					<div class="col-2">
+						<div class="btn-group">
+							<button class="btn btn-outline-danger" (click)="saveOfficer(Officer);">
+								<i class="fa fa-lg fa-trash"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</div>
+
+	<br>
+
+</div>
+</div>
+</div>
