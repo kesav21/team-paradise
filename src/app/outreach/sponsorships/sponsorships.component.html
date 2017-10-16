@@ -2,21 +2,21 @@
 
 	<br>
 
-	<h1 class="display-4">Sponsorships</h1>
+	<h1 class="display-4">Sponsorship Tiers</h1>
 
 	<br>
 
 	<div *ngIf="!auth.user">
 
-		<div *ngFor="let Sponsorship of SponsorshipLevels | async">
+		<div *ngFor="let Tier of Tiers$ | async">
 
 			<div class="card">
 				<div class="card-header">
-					<h2>{{Sponsorship.$key}}: {{Sponsorship.Description}}</h2>
+					<h2>{{Tier.Name}} Tier: ${{Tier.Bounds.Lower}}-${{Tier.Bounds.Upper}}</h2>
 				</div>
 				<ul class="list-group list-group-flush">
-					<li *ngFor="let Perk of Sponsorship.Perks" class="list-group-item">
-						{{Perk.Text}}
+					<li *ngFor="let Benefit of Tier.Benefits" class="list-group-item">
+						{{Benefit}}
 					</li>
 				</ul>
 			</div>
@@ -29,54 +29,118 @@
 
 	<div *ngIf="auth.user">
 
-		<div *ngFor="let Level of SponsorshipLevels | async">
+		<div *ngFor="let Tier of Tiers$ | async">
 
-			<div class="card">
+			<div class="card mb-3">
 				<div class="card-header">
-				<div class="row">
-					<div class="col-10">
-					<div class="form-group">
-						<h2>{{Level.$key}}: {{Level.Description}}</h2>
+				<div class="form-row">
+					<div class="col-4">
+						<div class="input-group">
+							<input type="text" [(ngModel)]="Tier.Name" class="form-control">
+							<span class="input-group-addon">Tier</span>
+						</div>
 					</div>
+					<div class="col-1"></div>
+					<div class="col-2">
+						<div class="input-group">
+							<span class="input-group-addon">$</span>
+							<input type="text" [(ngModel)]="Tier.Bounds.Lower" class="form-control">
+						</div>
 					</div>
 					<div class="col-2">
+						<div class="input-group">
+							<span class="input-group-addon">$</span>
+							<input type="text" [(ngModel)]="Tier.Bounds.Upper" class="form-control">
+						</div>
+					</div>
+					<div class="col-1"></div>
+					<div class="col-2">
 					<div class="btn-group float-right">
-						<button class="btn btn-outline-danger" (click)="saveLevel(Level);">
+						<button class="btn btn-danger" (click)="saveTier(Tier);">
 							<i class="fa fa-lg fa-save"></i>
 						</button>
-						<button class="btn btn-outline-danger" (click)="removeLevel(Level.$key);">
+						<button class="btn btn-danger" (click)="removeTier(Tier.$key);">
 							<i class="fa fa-lg fa-trash-o"></i>
 						</button>
 					</div>
 					</div>
 				</div>
 				</div>
-				<div class="card-body">
-					<div *ngFor="let Perk of Level.Perks">
-						<div class="row">
-							<div class="col-10">
-								<input type="text" [(ngModel)]="Perk.Text" placeholder="New Perk" class="form-control">
-							</div>
-							<div class="col-2">
-							<div class="btn-group float-right">
-								<button class="btn btn-outline-danger" (click)="addPerk(Level.Perks, Perk);">
+				<ul class="list-group list-group-flush">
+					<li *ngFor="let Benefit of Tier.Benefits;trackBy: trackTier;let i = index" class="list-group-item">
+						<div class="input-group">
+							<input type="text" [(ngModel)]="Tier.Benefits[i]" placeholder="New Benefit" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="addBenefit(Tier.Benefits, Benefit);">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
-								<button class="btn btn-outline-danger" (click)="removePerk(Level.Perks, Perk);">
+							</span>
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="removeBenefit(Tier.Benefits, Benefit);">
 									<i class="fa fa-lg fa-trash-o"></i>
 								</button>
-							</div>
-							</div>
+							</span>
 						</div>
-
-						<br>
-					</div>
-				</div>
+					</li>
+				</ul>
 			</div>
 
-			<br>
-
 		</div>
+
+		<h1>Add Tier</h1>
+		<br>
+		<div class="card mb-3">
+			<div class="card-header">
+			<div class="form-row">
+				<div class="col-4">
+					<div class="input-group">
+						<input type="text" [(ngModel)]="newTier.Name" placeholder="Tier Name" class="form-control">
+						<span class="input-group-addon">Tier</span>
+					</div>
+				</div>
+				<div class="col-1"></div>
+				<div class="col-2">
+					<div class="input-group">
+						<span class="input-group-addon">$</span>
+						<input type="text" [(ngModel)]="newTier.Bounds.Lower" class="form-control">
+					</div>
+				</div>
+				<div class="col-2">
+					<div class="input-group">
+						<span class="input-group-addon">$</span>
+						<input type="text" [(ngModel)]="newTier.Bounds.Upper" class="form-control">
+					</div>
+				</div>
+				<div class="col-2"></div>
+				<div class="col-1">
+				<div class="btn-group float-right">
+					<button class="btn btn-danger" (click)="addTier(newTier);">
+						<i class="fa fa-lg fa-plus"></i>
+					</button>
+				</div>
+				</div>
+			</div>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li *ngFor="let Benefit of newTier.Benefits;trackBy: trackTier;let i = index" class="list-group-item">
+					<div class="input-group">
+						<input type="text" [(ngModel)]="newTier.Benefits[i]" placeholder="New Benefit" class="form-control">
+						<span class="input-group-btn">
+							<button class="btn btn-danger" (click)="addBenefit(newTier.Benefits, Benefit);">
+								<i class="fa fa-lg fa-plus"></i>
+							</button>
+						</span>
+						<span class="input-group-btn">
+							<button class="btn btn-danger" (click)="removeBenefit(newTier.Benefits, Benefit);">
+								<i class="fa fa-lg fa-trash-o"></i>
+							</button>
+						</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<br>
 
 	</div>
 
@@ -87,12 +151,12 @@
 	<div *ngIf="!auth.user">
 
 		<ul class="list-group">
-			<li *ngFor="let Sponsor of Sponsors | async" class="list-group-item">
+			<li *ngFor="let Sponsor of Sponsors$ | async" class="list-group-item">
 				<div class="row">
-					<div class="col-4">{{Sponsor.$key}}</div>
+					<div class="col-4">{{Sponsor.Name}}</div>
 					<div class="col-8">
 						<span class="float-right">
-							<img [src]="Sponsor.$value" style="max-height:400px; max-width: 400px" class="img-responsive img-thumbnail">
+							<img [src]="Sponsor.Image" style="max-height:400px; max-width: 400px" class="img-responsive img-thumbnail">
 						</span>
 					</div>
 				</div>
@@ -114,19 +178,19 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let Sponsor of Sponsors | async" class="row">
+				<tr *ngFor="let Sponsor of Sponsors$ | async" class="row">
 					<td class="col-3">
-						{{Sponsor.$key}}
+						<input type="text" [(ngModel)]="Sponsor.Name" placeholder="Sponsor Name" class="form-control">
 					</td>
 					<td class="col-7">
-						<input type="text" [(ngModel)]="Sponsor.$value" class="form-control">
+						<input type="text" [(ngModel)]="Sponsor.Image" placeholder="Sponsor Image URL" class="form-control">
 					</td>
 					<td class="col-2">
 						<div class="btn-group float-right">
-							<button class="btn btn-outline-danger" (click)="saveSponsor(Sponsor);">
+							<button class="btn btn-danger" (click)="saveSponsor(Sponsor);">
 								<i class="fa fa-lg fa-save"></i>
 							</button>
-							<button class="btn btn-outline-danger" (click)="removeSponsor(Sponsor.$key);">
+							<button class="btn btn-danger" (click)="removeSponsor(Sponsor.id);">
 								<i class="fa fa-lg fa-trash-o"></i>
 							</button>
 						</div>
@@ -137,11 +201,11 @@
 						<input type="text" [(ngModel)]="newSponsor.Name" placeholder="Sponsor Name" class="form-control">
 					</td>
 					<td class="col-7">
-						<input type="text" [(ngModel)]="newSponsor.ImageURL" placeholder="Sponsor Image" class="form-control">
+						<input type="text" [(ngModel)]="newSponsor.Image" placeholder="Sponsor Image" class="form-control">
 					</td>
 					<td class="col-2">
 						<div class="btn-group float-right">
-							<button class="btn btn-outline-danger" (click)="addSponsor();">
+							<button class="btn btn-danger" (click)="addSponsor();">
 								<i class="fa fa-lg fa-plus"></i>
 							</button>
 						</div>

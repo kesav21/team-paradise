@@ -42,7 +42,6 @@ import { DatabaseService } from './database-service/database.service';
 import { AuthService } from './auth-service/auth.service';
 
 import { ReversePipe } from './reverse-pipe/reverse.pipe';
-import { ObjectToStringPipe } from './object-to-string/object-to-string.pipe';
 
 @NgModule({
   declarations: [
@@ -61,8 +60,7 @@ import { ObjectToStringPipe } from './object-to-string/object-to-string.pipe';
     ReversePipe,
     CompetitionDetailComponent,
     CompetitionListComponent,
-    PeopleComponent,
-    ObjectToStringPipe
+    PeopleComponent
   ],
   imports: [
     BrowserModule,

@@ -17,10 +17,9 @@
 		</thead>
 		<tbody>
 			<tr *ngFor="let Newsletter of Newsletters$ | async | reverse">
-				<td>{{Newsletter.$key | date}}</td>
-				<!-- <td>{{Newsletter.Timestamp | date}}</td> -->
+				<td>{{Newsletter.Timestamp | date}}</td>
 				<td>
-					<a href="{{Newsletter.URL}}" target="_blank">
+					<a [href]="Newsletter.URL" target="_blank">
 						{{Newsletter.Text}}
 					</a>
 				</td>

@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FirebaseListObservable } from 'angularfire2/database-deprecated';
+import { AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 
 import { AuthService } from '../../auth-service/auth.service';
 import { DatabaseService } from '../../database-service/database.service';
 
-import { Level, Sponsor } from '../../models';
+import {
+	Tier, TierID, TierObj,
+	Sponsor, SponsorID, SponsorObj
+} from '../../models';
+
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
 	selector: 'app-sponsorships',
@@ -14,85 +20,69 @@ import { Level, Sponsor } from '../../models';
 })
 export class SponsorshipsComponent implements OnInit {
 
-	SponsorshipLevels: FirebaseListObservable<Level[]>;
-	Sponsors: FirebaseListObservable<Sponsor[]>;
+	Tiers: AngularFirestoreCollection<Tier>;
+	Sponsors: AngularFirestoreCollection<Sponsor>;
 
-	newLevel: Level;
-	newSponsor: Sponsor;
+	Tiers$: Observable<TierID[]>;
+	Sponsors$: Observable<SponsorID[]>;
 
-	constructor(public auth: AuthService, private db: DatabaseService) {
-	}
+	newTier: TierObj;
+	newSponsor: SponsorObj;
+
+	constructor(public auth: AuthService, private db: DatabaseService) {}
 
 	ngOnInit() {
-		this.SponsorshipLevels = this.db.getSponsorships();
-		this.Sponsors = this.db.getSponsors();
+		this.Tiers = this.db.getTiers();
+		this.Sponsors = this.db.getSponsorsCol();
 
-		this.resetNewLevel();
-		this.resetNewSponsor();
+		this.Tiers$ = this.db.getSnapshot(this.Tiers);
+		this.Sponsors$ = this.db.getSnapshot(this.Sponsors);
+
+		this.newTier = new TierObj();
+		this.newSponsor = new SponsorObj();
 	}
 
-	saveLevel(Level: any): void {
-		this.SponsorshipLevels.update(Level.$key, Level);
+	addTier(): void {
+		this.Tiers.add(this.newTier.getObj());
+		this.newTier.reset();
 	}
 
-	addLevel(): void {
-		this.SponsorshipLevels.push({
-			Name: 'Sponsorship Level',
-			Perks: [{
-				Name: 'Perk of Level'
-			}]
-		});
+	saveTier(Tier: TierID): void {
+		const tier = new TierObj(Tier);
+		this.Tiers.doc(tier.id).update(tier.getObj());
 	}
 
-	removeLevel(key: string): void {
-		key?
-			this.SponsorshipLevels.remove(key):
-			console.log('Level key is null.');
+	removeTier(id: string): void {
+		this.Tiers.doc(id).delete();
 	}
 
-	addPerk(Perks: any[], Perk: any): void {
-		Perks.splice(Perks.indexOf(Perk) + 1, 0, {
-			Text: ''
-		});
+	addBenefit(Benefits: string[], Benefit: string): void {
+		Benefits.splice(Benefits.indexOf(Benefit) + 1, 0, '');
 	}
 
-	removePerk(Perks: any[], Perk: any): void {
-		Perks.splice(Perks.indexOf(Perk), 1);
+	removeBenefit(Benefits: string[], Benefit: string): void {
+		Benefits.splice(Benefits.indexOf(Benefit), 1);
 	}
 
-
-	saveSponsor(Sponsor: any): void {
-		this.Sponsors.update(Sponsor.$key, Sponsor);
+	trackTier(index: number, benefit: string) {
+		return index;
 	}
+
 
 	addSponsor(): void {
-		this.Sponsors.update(this.newSponsor.Name, this.newSponsor.ImageURL);
+		this.Sponsors.add(this.newSponsor.getObj());
+		this.newSponsor.reset();
 	}
 
-	removeSponsor(key: string): void {
-		key?
-			this.Sponsors.remove(key):
-			console.log('Level key is null.');
+	saveSponsor(Sponsor: SponsorID): void {
+		const sponsor = new SponsorObj(Sponsor);
+		this.Sponsors.doc(sponsor.id).update(sponsor.getObj());
 	}
 
-	resetNewLevel() {
-		this.newLevel = {
-			Name: '',
-			Level: {
-				Description: '',
-				Perks: [{
-					Text: ''
-				}]
-			}
-		};
+	removeSponsor(id: string): void {
+		this.Sponsors.doc(id).delete();
 	}
 
-	resetNewSponsor() {
-		this.newSponsor = {
-			Name: '',
-			ImageURL: ''
-		};
-	}
 }
 
 // Bronze: #A67D3D

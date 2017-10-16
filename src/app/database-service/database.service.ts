@@ -25,7 +25,7 @@ import {
 	Newsletter,
 	Project,
 	Sponsor,
-	Level,
+	Tier,
 	Person,
 } from '../models';
 
@@ -106,8 +106,8 @@ export class DatabaseService {
 		return this.db.list('/Sponsorships/Sponsors 2/');
 	}
 
-	getSponsorships(): FirebaseListObservable<Level[]> {
-		return this.db.list('/Sponsorships/Sponsorship Levels/');
+	getSponsorships(): FirebaseListObservable<Tier[]> {
+		return this.db.list('/Sponsorships/Sponsorship Tiers/');
 	}
 
 
@@ -136,6 +136,14 @@ export class DatabaseService {
 
 	getNewslettersCol(): AngularFirestoreCollection<Newsletter> {
 		return this.fs.collection<Newsletter>('Newsletters', (ref) => ref.orderBy('Timestamp'));
+	}
+
+	getSponsorsCol(): AngularFirestoreCollection<Sponsor> {
+		return this.fs.collection<Sponsor>('Sponsors');
+	}
+
+	getTiers(): AngularFirestoreCollection<Tier> {
+		return this.fs.collection<Tier>('Tiers', (ref) => ref.orderBy('Bounds.Upper'));
 	}
 
 
