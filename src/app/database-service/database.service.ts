@@ -123,7 +123,7 @@ export class DatabaseService {
 	}
 
 	getCompetitions(): AngularFirestoreCollection<Competition> {
-		return this.fs.collection<Competition>('Competitions');
+		return this.fs.collection<Competition>('Competitions', (ref) => ref.orderBy('Year'));
 	}
 
 	getCompetition(year: string): AngularFirestoreDocument<Competition> {

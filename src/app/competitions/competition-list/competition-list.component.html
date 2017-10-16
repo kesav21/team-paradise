@@ -3,24 +3,24 @@
 	<br>
 	<br>
 
-	<div *ngFor="let Year of Competitions | async | reverse">
+	<div *ngFor="let Competition of Competitions | async | reverse">
 
-		<div class="card card-outline-danger">
+		<div class="card card-outline-danger mb-3">
 			<div class="card-header">
 				<div *ngIf="!auth.user">
-					<h4 class="display-4"> {{Year.id}} {{Year.Game.Name}}</h4>
+					<h4 class="display-4">{{Competition.Year}} {{Competition.Game.Name}}</h4>
 				</div>
 				<div *ngIf="auth.user">
 					<div class="row">
 						<div class="col-9">
-							<h4 class="display-4"> {{Year.id}} {{Year.Game.Name}}</h4>
+							<h4 class="display-4">{{Competition.Year}} {{Competition.Game.Name}}</h4>
 						</div>
 						<div class="col-3">
 						<div class="btn-group float-right">
 							<a class="btn btn-outline-danger" routerLink="/competitions/new">
 								<i class="fa fa-lg fa-plus"></i>
 							</a>
-							<button class="btn btn-outline-danger" (click)="removeRobot(Year);">
+							<button class="btn btn-outline-danger" (click)="removeCompetition(Competition.id);">
 								<i class="fa fa-lg fa-trash"></i>
 							</button>
 						</div>
@@ -31,23 +31,21 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-9">
-						<p class="card-text">{{Year.Game.Description}}</p>
+						<p class="card-text">{{Competition.Game.Description}}</p>
 						<div class="text-right">
-							<a [routerLink]="['/competitions', Year.id]" class="btn btn-outline-danger">
+							<a [routerLink]="['/competitions', Competition.id]" class="btn btn-outline-danger">
 								Read More
 							</a>
 						</div>
 					</div>
 					<div class="col-3">
-						<a [routerLink]="['/competitions', Year.id]">
-							<img [src]="Year.Robot.Image" width="200" height="200" class="img-thumbnail">
+						<a [routerLink]="['/competitions', Competition.id]">
+							<img [src]="Competition.Robot.Image" width="200" height="200" class="img-thumbnail">
 						</a>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<br>
 
 	</div>
 

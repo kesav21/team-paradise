@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
@@ -13,7 +12,12 @@ import { Location } from '@angular/common';
 
 import 'rxjs/add/operator/switchMap';
 
-import { Competition, Ability, Fact, Regional, CompetitionID, AbilityID, FactID, RegionalID } from '../../models';
+import {
+	Competition, CompetitionID, CompetitionObj,
+	Ability, AbilityID, AbilityObj,
+	Fact, FactID, FactObj,
+	Regional, RegionalID, RegionalObj
+} from '../../models';
 
 @Component({
 	selector: 'app-competition-detail',
@@ -22,7 +26,14 @@ import { Competition, Ability, Fact, Regional, CompetitionID, AbilityID, FactID,
 })
 export class CompetitionDetailComponent implements OnInit {
 
-	newCompetition: Competition;
+	new: boolean;
+
+	newCompetition: CompetitionObj;
+
+	newFacts: FactObj[] = [];
+	newAbilities: AbilityObj[] = [];
+	newRegionals: RegionalObj[] = [];
+
 
 	CompetitionDoc: AngularFirestoreDocument<Competition>;
 	CompetitionVar: Observable<CompetitionID>;
@@ -36,35 +47,46 @@ export class CompetitionDetailComponent implements OnInit {
 	RegionalsCollection: AngularFirestoreCollection<Regional>;
 	Regionals: Observable<RegionalID>;
 
-	new: boolean;
+	newFact: FactObj;
+	newAbility: AbilityObj;
+	newRegional: RegionalObj;
 
 	constructor(
 		public auth: AuthService,
 		private db: DatabaseService,
 		private route: ActivatedRoute,
-		private location: Location,
-		private sanitizer: DomSanitizer
+		private location: Location
 	) {}
 
 	ngOnInit(): void {
 		this.route.params.subscribe((params: Params) => {
 			if(params['year'] === 'new') {
 				this.new = true;
-				this.resetNewCompetition();
+
+				this.newCompetition = new CompetitionObj();
+
+				this.newFacts.push(new FactObj('', ''));
+				this.newAbilities.push(new AbilityObj(''));
+				this.newRegionals.push(new RegionalObj('', ''));
+
 			} else {
 				this.new = false;
 
 				this.CompetitionDoc = this.db.getCompetition(params['year']);
 
-				this.AbilitiesCollection = this.CompetitionDoc.collection('Abilities');
-				this.FactsCollection = this.CompetitionDoc.collection('Facts');
-				this.RegionalsCollection = this.CompetitionDoc.collection('Regionals');
+				this.AbilitiesCollection = this.CompetitionDoc.collection('Abilities', (ref) => ref.orderBy('Timestamp'));
+				this.FactsCollection = this.CompetitionDoc.collection('Facts', (ref) => ref.orderBy('Timestamp'));
+				this.RegionalsCollection = this.CompetitionDoc.collection('Regionals', (ref) => ref.orderBy('Timestamp'));
 
 				this.CompetitionVar = this.CompetitionDoc.valueChanges();
 
 				this.Abilities = this.db.getSnapshot(this.AbilitiesCollection);
 				this.Facts = this.db.getSnapshot(this.FactsCollection);
 				this.Regionals = this.db.getSnapshot(this.RegionalsCollection);
+
+				this.newFact = new FactObj('', '', null);
+				this.newAbility = new AbilityObj('', null);
+				this.newRegional = new RegionalObj('', '', null);
 
 			}
 		});
@@ -74,31 +96,20 @@ export class CompetitionDetailComponent implements OnInit {
 		this.CompetitionDoc.delete();
 	}
 
-	saveCompetition(gameName: string, gameReveal: string, gameDescription: string, robotImage: string, robotName: string, robotReport: string, robotReveal: string): void {
-		if (gameName &&  gameReveal &&  gameDescription &&  robotImage &&  robotName &&  robotReport &&  robotReveal) {
-			this.CompetitionDoc.update({
-				Game: {
-					Name: gameName,
-					Description: gameDescription,
-					Reveal: gameReveal
-				},
-				Robot: {
-					Image: robotImage,
-					Name: robotName,
-					Report: robotReport,
-					Reveal: robotReveal
-				},
-			});
+	saveCompetition(year: number, gameName: string, gameReveal: string, gameDescription: string, robotImage: string, robotName: string, robotReport: string, robotReveal: string): void {
+		let competition = new CompetitionObj(year, gameName, gameReveal, gameDescription, robotImage, robotName, robotReport, robotReveal);
+
+		if(competition.isNull()) {
+			console.error('One of the Game of Robot properties is null.')
+		} else {
+			this.CompetitionDoc.update(competition.getObject());
 		}
 	}
 
-	addFact(key: string, value: string): void {
-		this.FactsCollection.add({
-			Key: key,
-			Value: value
-		})
-		key = '';
-		value = '';
+	addFact(): void {
+		this.newFact.updateTime();
+		this.FactsCollection.add(this.newFact.getObject());
+		this.newFact = new FactObj('', '', null);
 	}
 
 	saveFact(Fact: FactID) {
@@ -107,20 +118,23 @@ export class CompetitionDetailComponent implements OnInit {
 		doc.update(Fact);
 	}
 
+	// saveFact(FactID: FactID) {
+	// 	this.FactsCollection.doc(FactID.id).update(FactID.getObject());
+	// }
+
 	removeFact(key: string): void {
 		this.FactsCollection.doc(key).delete();
 	}
 
-	addAbility(ability: string): void {
-		this.AbilitiesCollection.add({
-			Name: ability
-		})
+	addAbility(): void {
+		this.newAbility.updateTime();
+		this.AbilitiesCollection.add(this.newAbility.getObject());
+		this.newAbility = new AbilityObj('', null);
 	}
 
 	saveAbility(Ability: AbilityID) {
 		const doc = this.AbilitiesCollection.doc(Ability.id);
 		delete Ability.id;
-		console.log(Ability);
 		doc.update(Ability);
 	}
 
@@ -128,11 +142,10 @@ export class CompetitionDetailComponent implements OnInit {
 		this.AbilitiesCollection.doc(key).delete();
 	}
 
-	addRegional(key: string, value: string): void {
-		this.RegionalsCollection.add({
-			Location: key,
-			Awards: value
-		})
+	addRegional(): void {
+		this.newRegional.updateTime();
+		this.RegionalsCollection.add(this.newRegional.getObject());
+		this.newRegional = new RegionalObj('', '', null);
 	}
 
 	saveRegional(Regional: RegionalID) {
@@ -145,19 +158,40 @@ export class CompetitionDetailComponent implements OnInit {
 		this.RegionalsCollection.doc(key).delete();
 	}
 
-	resetNewCompetition() {
-		this.newCompetition = {
-			Game: {
-				Description: '',
-				Name: '',
-				Reveal: '',
-			},
-			Robot: {
-				Image: '',
-				Name: '',
-				Report: '',
-				Reveal: '',
-			}
-		};
+	addCompetition() {
+		this.db.getCompetitions().add(this.newCompetition.getObject()).then((doc) => {
+			let abilities = doc.collection('Abilities');
+			let facts = doc.collection('Facts');
+			let regionals = doc.collection('Regionals');
+
+			this.newAbilities.forEach((Ability: AbilityObj) => abilities.add(Ability.getObject()));
+			this.newFacts.forEach((Fact: FactObj) => facts.add(Fact.getObject()));
+			this.newRegionals.forEach((Regional: RegionalObj) => regionals.add(Regional.getObject()));
+		});
+
+	}
+
+	addNewFact(newFact: FactObj) {
+		this.newFacts.splice(this.newFacts.indexOf(newFact) + 1, 0, new FactObj('', ''));
+	}
+
+	removeNewFact(newFact: FactObj) {
+		this.newFacts.splice(this.newFacts.indexOf(newFact), 1);
+	}
+
+	addNewAbility(newAbility: AbilityObj) {
+		this.newAbilities.splice(this.newAbilities.indexOf(newAbility) + 1, 0, new AbilityObj(''));
+	}
+
+	removeNewAbility(newAbility: AbilityObj) {
+		this.newAbilities.splice(this.newAbilities.indexOf(newAbility), 1);
+	}
+
+	addNewRegional(newRegional: RegionalObj) {
+		this.newRegionals.splice(this.newRegionals.indexOf(newRegional) + 1, 0, new RegionalObj('', ''));
+	}
+
+	removeNewRegional(newRegional: RegionalObj) {
+		this.newRegionals.splice(this.newRegionals.indexOf(newRegional), 1);
 	}
 }

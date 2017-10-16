@@ -1,4 +1,5 @@
 <div class="container">
+
 <div *ngIf="CompetitionVar">
 
 	<br>
@@ -19,10 +20,6 @@
 	<div *ngIf="!auth.user">
 
 		<h1 class="display-4">{{(CompetitionVar | async)?.Game.Name}}</h1>
-
-		<br>
-
-		<h1>About the Game</h1>
 
 		<div class="row">
 			<div class="col-5">
@@ -56,7 +53,7 @@
 		<br>
 		<br>
 
-		<h1>{{(CompetitionVar | async)?.Robot.Name}} - The Robot</h1>
+		<h1 class="display-4">{{(CompetitionVar | async)?.Robot.Name}}</h1>
 
 		<br>
 		<br>
@@ -78,8 +75,8 @@
 						<h4>Regionals</h4>
 					</div>
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item" *ngFor="let Regional of (CompetitionVar | async)?.Regionals">
-							<span class="badge badge-danger">{{Regional.Location}}</span> {{Regional.Award}}
+						<li class="list-group-item" *ngFor="let Regional of Regionals | async">
+							<span class="badge badge-danger">{{Regional.Location}}</span> {{Regional.Awards}}
 						</li>
 					</ul>
 				</div>
@@ -90,8 +87,8 @@
 						<h4>Quick Facts</h4>
 					</div>
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item" *ngFor="let Fact of (CompetitionVar | async)?.Robot.Facts">
-							<span class="badge badge-pill badge-danger">{{Fact.Criteria}}</span> {{Fact.Fact}}
+						<li class="list-group-item" *ngFor="let Fact of Facts | async">
+							<span class="badge badge-pill badge-danger">{{Fact.Key}}</span> {{Fact.Value}}
 						</li>
 					</ul>
 				</div>
@@ -106,8 +103,8 @@
 				<h4>Abilities</h4>
 			</div>
 			<ul class="list-group list-group-flush">
-				<li class="list-group-item" *ngFor="let Ability of (CompetitionVar | async)?.Robot.Abilities">
-					{{Ability}}
+				<li class="list-group-item" *ngFor="let Ability of Abilities | async">
+					{{Ability.Name}}
 				</li>
 			</ul>
 		</div>
@@ -130,7 +127,7 @@
 					</div>
 					<div class="col-1">
 						<div class="btn-group">
-							<button class="btn btn-outline-danger" (click)="saveCompetition(gameName.value, gameReveal.value, gameDescription.value, robotImage.value, robotName.value, robotReport.value, robotReveal.value)">
+							<button class="btn btn-outline-danger" (click)="saveCompetition(year.value, gameName.value, gameReveal.value, gameDescription.value, robotImage.value, robotName.value, robotReport.value, robotReveal.value)">
 								<i class="fa fa-lg fa-save"></i>
 							</button>
 						</div>
@@ -139,11 +136,15 @@
 				</div>
 				<div class="card-body">
 					<div class="row">
-						<div class="col-6 form-group">
+						<div class="col-2 form-group">
+							<label>Year</label>
+							<input #year type="number" [ngModel]="(CompetitionVar | async)?.Year" class="form-control">
+						</div>
+						<div class="col-5 form-group">
 							<label>Name</label>
 							<input #gameName type="text" [ngModel]="(CompetitionVar | async)?.Game.Name" class="form-control">
 						</div>
-						<div class="col-6 form-group">
+						<div class="col-5 form-group">
 							<label>Reveal</label>
 							<input #gameReveal type="text" [ngModel]="(CompetitionVar | async)?.Game.Reveal" class="form-control">
 						</div>
@@ -173,7 +174,7 @@
 					</div>
 					<div class="col-1">
 						<div class="btn-group">
-							<button class="btn btn-outline-danger" (click)="saveCompetition(gameName, gameReveal, gameDescription, robotImage, robotName, robotReport, robotReveal)">
+							<button class="btn btn-outline-danger" (click)="saveCompetition(year.value, gameName.value, gameReveal.value, gameDescription.value, robotImage.value, robotName.value, robotReport.value, robotReveal.value)">
 								<i class="fa fa-lg fa-save"></i>
 							</button>
 						</div>
@@ -236,13 +237,13 @@
 					<li class="list-group-item">
 						<div class="row">
 							<div class="form-group col-4">
-								<input #factKey type="text" class="form-control">
+								<input type="text" [(ngModel)]="newFact.Key" (keyup.enter)="addFact();" class="form-control">
 							</div>
 							<div class="form-group col-6">
-								<input #factValue type="text" class="form-control">
+								<input type="text" [(ngModel)]="newFact.Value" (keyup.enter)="addFact();" class="form-control">
 							</div>
 							<div class="form-group col-2">
-								<button class="btn btn-outline-danger" (click)="addFact(factKey.value, factValue.value);">
+								<button class="btn btn-outline-danger" (click)="addFact();">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
 							</div>
@@ -279,10 +280,10 @@
 					<li class="list-group-item">
 						<div class="row">
 							<div class="form-group col-10">
-								<input #ability type="text" class="form-control">
+								<input type="text" [(ngModel)]="newAbility.Name" (keyup.enter)="addAbility();" class="form-control">
 							</div>
 							<div class="form-group col-2">
-								<button class="btn btn-outline-danger" (click)="addAbility(ability.value);">
+								<button class="btn btn-outline-danger" (keyup.enter)="addAbility();" (click)="addAbility();">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
 							</div>
@@ -322,13 +323,13 @@
 					<li class="list-group-item">
 						<div class="row">
 							<div class="form-group col-4">
-								<input #regionalKey type="text" class="form-control">
+								<input type="text" [(ngModel)]="newRegional.Location" (keyup.enter)="addRegional();" class="form-control">
 							</div>
 							<div class="form-group col-6">
-								<input #regionalValue type="text" class="form-control">
+								<input type="text"  [(ngModel)]="newRegional.Awards" (keyup.enter)="addRegional();" class="form-control">
 							</div>
 							<div class="form-group col-2">
-								<button class="btn btn-outline-danger" (click)="addRegional(regionalKey.value, regionalValue.value);">
+								<button class="btn btn-outline-danger" (click)="addRegional();">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
 							</div>
@@ -342,4 +343,198 @@
 	</div>
 
 </div>
+
+<div *ngIf="new">
+<div *ngIf="auth.user">
+
+	<br>
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a href="/competitions">
+				Competitions
+			</a>
+		</li>
+		<li class="breadcrumb-item active">
+			{{newCompetition.Game.Name}}
+		</li>
+	</ol>
+
+	<hr>
+
+	<div id="Season">
+
+		<h1 class="display-4">Season</h1>
+
+		<br>
+
+		<div class="card">
+			<div class="card-header">
+				<div class="row">
+				<div class="col-10">
+					<h4 class="card-title">About the Game</h4>
+				</div>
+				<div class="col-2">
+					<div class="btn-group">
+						<button class="btn btn-outline-danger" (click)="addCompetition()">
+							Add Competition
+						</button>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-2 form-group">
+						<label>Year</label>
+						<input type="number" [(ngModel)]="newCompetition.Year" class="form-control">
+					</div>
+					<div class="col-5 form-group">
+						<label>Name</label>
+						<input type="text" [(ngModel)]="newCompetition.Game.Name" class="form-control">
+					</div>
+					<div class="col-5 form-group">
+						<label>Reveal</label>
+						<input type="text" [(ngModel)]="newCompetition.Game.Reveal" class="form-control">
+					</div>
+				</div>
+				<label>Description</label>
+				<textarea [(ngModel)]="newCompetition.Game.Description" class="form-control" rows="5">
+				</textarea>
+			</div>
+		</div>
+
+	</div>
+
+	<br>
+	<br>
+
+	<h1 class="display-4">Robot</h1>
+
+	<br>
+
+	<div id="Robot">
+
+		<div class="card">
+			<div class="card-header">
+				<h4 class="card-title">Overview</h4>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-6 form-group">
+						<label>Name</label>
+						<input type="text" [(ngModel)]="newCompetition.Robot.Name" class="form-control">
+					</div>
+					<div class="col-6 form-group">
+						<label>Reveal</label>
+						<input type="text" [(ngModel)]="newCompetition.Robot.Reveal" class="form-control">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>Image</label>
+						<input type="text" [(ngModel)]="newCompetition.Robot.Image" class="form-control">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 form-group">
+						<label>Report</label>
+						<input type="text" [(ngModel)]="newCompetition.Robot.Report" class="form-control">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br>
+
+		<div class="card">
+			<div class="card-header">
+				<h4 class="card-title">Quick Facts</h4>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li *ngFor="let Fact of newFacts" class="list-group-item">
+					<div class="row">
+						<div class="form-group col-4">
+							<input type="text" [(ngModel)]="Fact.Key" class="form-control">
+						</div>
+						<div class="form-group col-6">
+							<input type="text" [(ngModel)]="Fact.Value" class="form-control">
+						</div>
+						<div class="form-group col-2">
+							<div class="btn-group">
+								<button class="btn btn-outline-danger" (click)="addNewFact(Fact)">
+									<i class="fa fa-lg fa-plus"></i>
+								</button>
+								<button class="btn btn-outline-danger" (click)="removeNewFact(Fact);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<br>
+
+		<div class="card">
+			<div class="card-header">
+				<h4 class="card-title">Abilities</h4>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li *ngFor="let Ability of newAbilities" class="list-group-item">
+					<div class="row">
+						<div class="form-group col-10">
+							<input type="text" [(ngModel)]="Ability.Name" class="form-control">
+						</div>
+						<div class="form-group col-2">
+							<div class="btn-group">
+								<button class="btn btn-outline-danger" (click)="addNewAbility(Ability)">
+									<i class="fa fa-lg fa-plus"></i>
+								</button>
+								<button class="btn btn-outline-danger" (click)="removeNewAbility(Ability);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<br>
+
+		<div class="card">
+			<div class="card-header">
+				<h4 class="card-title">Regionals</h4>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li *ngFor="let Regional of newRegionals" class="list-group-item">
+					<div class="row">
+						<div class="form-group col-4">
+							<input type="text" [(ngModel)]="Regional.Location" class="form-control">
+						</div>
+						<div class="form-group col-6">
+							<input type="text" [(ngModel)]="Regional.Awards" class="form-control">
+						</div>
+						<div class="form-group col-2">
+							<div class="btn-group">
+								<button class="btn btn-outline-danger" (click)="addNewRegional(Regional)">
+									<i class="fa fa-lg fa-plus"></i>
+								</button>
+								<button class="btn btn-outline-danger" (click)="removeNewRegional(Regional);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+	</div>
+
+</div>
+</div>
+
 </div>

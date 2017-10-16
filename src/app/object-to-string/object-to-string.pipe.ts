@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-	name: 'objectToString'
+	name: 'objToStr'
 })
 export class ObjectToStringPipe implements PipeTransform {
 

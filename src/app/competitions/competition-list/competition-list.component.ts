@@ -26,8 +26,8 @@ export class CompetitionListComponent implements OnInit {
 		this.Competitions = this.db.getSnapshot(this.CompetitionsCollection);
 	}
 
-	addCompetition() {
-		//
+	removeCompetition(id: string) {
+		this.CompetitionsCollection.doc(id).delete();
 	}
 
 }
