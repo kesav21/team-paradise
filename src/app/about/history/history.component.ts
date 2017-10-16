@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FirebaseListObservable } from 'angularfire2/database-deprecated';
-
 import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
@@ -10,7 +8,7 @@ import { DatabaseService } from '../../database-service/database.service';
 
 import { ReversePipe } from '../../reverse-pipe/reverse.pipe';
 
-import { Event, EventID, EventObj } from '../../models'
+import { Event, EventID, EventObj } from '../../models';
 
 @Component({
 	selector: 'app-history',
@@ -39,7 +37,7 @@ export class HistoryComponent implements OnInit {
 
 	save(Event: EventID): void {
 		const event = new EventObj(Event);
-		this.History.doc(event.ID).update(event.getObj());
+		this.History.doc(event.id).update(event.getObj());
 	}
 
 	remove(id: string): void {

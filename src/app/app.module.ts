@@ -20,14 +20,15 @@ import { AppComponent } from './app.component';
 import { AboutTeamComponent } from './about/about-team/about-team.component';
 import { GoalsComponent } from './about/goals/goals.component';
 import { HistoryComponent } from './about/history/history.component';
+import { PeopleComponent } from './about/people/people.component';
 
-import { CompetitionDetailComponent } from './competitions/competition-detail/competition-detail.component';
 import { CompetitionListComponent } from './competitions/competition-list/competition-list.component';
+import { CompetitionDetailComponent } from './competitions/competition-detail/competition-detail.component';
 
 import { ContactUsComponent } from './contact-us/contact-us.component';
 
-import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 import { HomeComponent } from './home/home.component';
 
@@ -41,7 +42,6 @@ import { DatabaseService } from './database-service/database.service';
 import { AuthService } from './auth-service/auth.service';
 
 import { ReversePipe } from './reverse-pipe/reverse.pipe';
-import { PeopleComponent } from './about/people/people.component';
 import { ObjectToStringPipe } from './object-to-string/object-to-string.pipe';
 
 @NgModule({

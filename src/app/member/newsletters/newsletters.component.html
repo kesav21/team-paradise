@@ -16,8 +16,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let Newsletter of Newsletters | async | reverse">
+			<tr *ngFor="let Newsletter of Newsletters$ | async | reverse">
 				<td>{{Newsletter.$key | date}}</td>
+				<!-- <td>{{Newsletter.Timestamp | date}}</td> -->
 				<td>
 					<a href="{{Newsletter.URL}}" target="_blank">
 						{{Newsletter.Text}}
@@ -40,8 +41,32 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let Newsletter of Newsletters | async | reverse" class="row">
-				<td class="col-3">{{Newsletter.$key | date}}</td>
+			<tr class="row">
+				<td class="col-3">
+					<div class="form-group">
+						<input type="date" [(ngModel)]="newNewsletter.Timestamp" class="form-control">
+					</div>
+				</td>
+				<td class="col-7">
+					<div class="form-group">
+						<input [(ngModel)]="newNewsletter.URL" placeholder="URL" class="form-control">
+					</div>
+					<div class="form-group">
+						<input [(ngModel)]="newNewsletter.Text" placeholder="Name" class="form-control">
+					</div>
+				</td>
+				<td class="col-2">
+					<button class="btn btn-outline-danger" (click)="add();">
+						<i class="fa fa-lg fa-plus"></i>
+					</button>
+				</td>
+			</tr>
+			<tr *ngFor="let Newsletter of Newsletters$ | async | reverse" class="row">
+				<td class="col-3">
+					<div class="form-group">
+						<input type="date" [(ngModel)]="Newsletter.Timestamp" class="form-control">
+					</div>
+				</td>
 				<td class="col-7">
 					<div class="form-group">
 						<input [(ngModel)]="Newsletter.URL" class="form-control">
@@ -59,34 +84,6 @@
 						<i class="fa fa-lg fa-trash"></i>
 					</button>
 				</div>
-				</td>
-			</tr>
-			<tr>
-				<div class="alert alert-warning" role="alert">
-					The Date should be formatted as <b>YYYY MM DD</b>, and <b>0s</b> should be added in the front
-					when the date is in single digits. This is necessary to maintain the order of the newsletters.
-					<br><br>
-					Ex: February 9, 2018 would be entered as 2018 02 09.
-				</div>
-			</tr>
-			<tr class="row">
-				<td class="col-3">
-					<div class="form-group">
-						<input [(ngModel)]="newNewsletter.Date" placeholder="Date (YYYY MM DD)" class="form-control">
-					</div>
-				</td>
-				<td class="col-7">
-					<div class="form-group">
-						<input [(ngModel)]="newNewsletter.URL" placeholder="URL" class="form-control">
-					</div>
-					<div class="form-group">
-						<input [(ngModel)]="newNewsletter.Text" placeholder="Name" class="form-control">
-					</div>
-				</td>
-				<td class="col-2">
-					<button class="btn btn-outline-danger" (click)="addNewsletter();">
-						<i class="fa fa-lg fa-plus"></i>
-					</button>
 				</td>
 			</tr>
 		</tbody>

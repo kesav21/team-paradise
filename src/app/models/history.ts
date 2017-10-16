@@ -1,12 +1,12 @@
 
-export class EventObj implements Event {
+export class EventObj implements EventID {
 	Description: string;
 	Game: string;
 	GameURL: string;
 	Robot: string;
 	Timestamp: string;
 
-	ID: string;
+	id: string;
 
 	constructor(event?: EventID) {
 		if(event) {
@@ -17,7 +17,7 @@ export class EventObj implements Event {
 			this.Timestamp = event.Timestamp;
 
 			if(event.id) {
-				this.ID = event.id;
+				this.id = event.id;
 			}
 		} else {
 			this.Description = '';
