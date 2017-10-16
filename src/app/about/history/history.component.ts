@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 
 import { FirebaseListObservable } from 'angularfire2/database-deprecated';
 
+import { AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+
 import { AuthService } from '../../auth-service/auth.service';
 import { DatabaseService } from '../../database-service/database.service';
 
 import { ReversePipe } from '../../reverse-pipe/reverse.pipe';
 
-import { History } from '../../models'
+import { Event, EventID, EventObj } from '../../models'
 
 @Component({
 	selector: 'app-history',
@@ -16,41 +19,31 @@ import { History } from '../../models'
 })
 export class HistoryComponent implements OnInit {
 
-	History: FirebaseListObservable<History[]>;
+	History: AngularFirestoreCollection<Event>;
+	History$: Observable<EventID[]>;
 
-	newEvent: History;
+	newEvent: EventObj;
 
-	constructor(public auth: AuthService, private db: DatabaseService) {
-	}
+	constructor(public auth: AuthService, private db: DatabaseService) {}
 
 	ngOnInit() {
-		this.History = this.db.getHistory();
-		this.resetNewEvent();
-	}
-
-	save(Event: any): void {
-		this.History.update(Event.$key, Event);
+		this.History = this.db.getHistoryCol();
+		this.History$ = this.db.getSnapshot(this.History);
+		this.newEvent = new EventObj();
 	}
 
 	add(): void {
-		this.History.push(this.newEvent);
-		this.resetNewEvent()
+		this.History.add(this.newEvent.getObj());
+		this.newEvent.reset();
 	}
 
-	remove(key: string): void {
-		key?
-			this.History.remove(key):
-			console.log('Event key is null.');
+	save(Event: EventID): void {
+		const event = new EventObj(Event);
+		this.History.doc(event.ID).update(event.getObj());
 	}
 
-	resetNewEvent(): void {
-		this.newEvent = {
-			Achievements: '',
-			Game: '',
-			GameURL: '',
-			Robot: '',
-			Year: ''
-		};
+	remove(id: string): void {
+		this.History.doc(id).delete();
 	}
 
 }

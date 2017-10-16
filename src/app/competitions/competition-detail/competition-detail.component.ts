@@ -102,13 +102,13 @@ export class CompetitionDetailComponent implements OnInit {
 		if(competition.isNull()) {
 			console.error('One of the Game of Robot properties is null.')
 		} else {
-			this.CompetitionDoc.update(competition.getObject());
+			this.CompetitionDoc.update(competition.getObj());
 		}
 	}
 
 	addFact(): void {
 		this.newFact.updateTime();
-		this.FactsCollection.add(this.newFact.getObject());
+		this.FactsCollection.add(this.newFact.getObj());
 		this.newFact = new FactObj('', '', null);
 	}
 
@@ -119,7 +119,7 @@ export class CompetitionDetailComponent implements OnInit {
 	}
 
 	// saveFact(FactID: FactID) {
-	// 	this.FactsCollection.doc(FactID.id).update(FactID.getObject());
+	// 	this.FactsCollection.doc(FactID.id).update(FactID.getObj());
 	// }
 
 	removeFact(key: string): void {
@@ -128,7 +128,7 @@ export class CompetitionDetailComponent implements OnInit {
 
 	addAbility(): void {
 		this.newAbility.updateTime();
-		this.AbilitiesCollection.add(this.newAbility.getObject());
+		this.AbilitiesCollection.add(this.newAbility.getObj());
 		this.newAbility = new AbilityObj('', null);
 	}
 
@@ -144,7 +144,7 @@ export class CompetitionDetailComponent implements OnInit {
 
 	addRegional(): void {
 		this.newRegional.updateTime();
-		this.RegionalsCollection.add(this.newRegional.getObject());
+		this.RegionalsCollection.add(this.newRegional.getObj());
 		this.newRegional = new RegionalObj('', '', null);
 	}
 
@@ -159,14 +159,14 @@ export class CompetitionDetailComponent implements OnInit {
 	}
 
 	addCompetition() {
-		this.db.getCompetitions().add(this.newCompetition.getObject()).then((doc) => {
+		this.db.getCompetitions().add(this.newCompetition.getObj()).then((doc) => {
 			let abilities = doc.collection('Abilities');
 			let facts = doc.collection('Facts');
 			let regionals = doc.collection('Regionals');
 
-			this.newAbilities.forEach((Ability: AbilityObj) => abilities.add(Ability.getObject()));
-			this.newFacts.forEach((Fact: FactObj) => facts.add(Fact.getObject()));
-			this.newRegionals.forEach((Regional: RegionalObj) => regionals.add(Regional.getObject()));
+			this.newAbilities.forEach((Ability: AbilityObj) => abilities.add(Ability.getObj()));
+			this.newFacts.forEach((Fact: FactObj) => facts.add(Fact.getObj()));
+			this.newRegionals.forEach((Regional: RegionalObj) => regionals.add(Regional.getObj()));
 		});
 
 	}

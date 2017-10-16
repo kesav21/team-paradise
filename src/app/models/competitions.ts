@@ -14,11 +14,11 @@ constructor(Year: number = new Date().getFullYear(), GameName: string = '', Game
 		return this.Year == null || this.Game.isNull() || this.Robot.isNull();
 	}
 
-	getObject() {
+	getObj(): Competition {
 		return {
 			Year: this.Year,
-			Game: this.Game.getObject(),
-			Robot: this.Robot.getObject()
+			Game: this.Game.getObj(),
+			Robot: this.Robot.getObj()
 		}
 	}
 }
@@ -39,7 +39,7 @@ export class GameObj implements Game {
 		return this.Description == null || this.Name == null || this.Reveal == null;
 	}
 
-	getObject() {
+	getObj(): Game {
 		return {
 			Description: this.Description,
 			Name: this.Name,
@@ -65,7 +65,7 @@ export class RobotObj implements Robot {
 		return this.Image == null || this.Name == null || this.Report == null || this.Reveal == null;
 	}
 
-	getObject() {
+	getObj(): Robot {
 		return {
 			Image: this.Image,
 			Name: this.Name,
@@ -84,7 +84,7 @@ export class AbilityObj implements Ability {
 		this.Timestamp = Timestamp;
 	}
 
-	getObject() {
+	getObj(): Ability {
 		return {
 			Name: this.Name,
 			Timestamp: this.Timestamp
@@ -107,7 +107,7 @@ export class FactObj implements Fact {
 		this.Timestamp = Timestamp;
 	}
 
-	getObject() {
+	getObj(): Fact {
 		return {
 			Key: this.Key,
 			Value: this.Value,
@@ -131,7 +131,7 @@ export class RegionalObj implements Regional {
 		this.Timestamp = Timestamp;
 	}
 
-	getObject() {
+	getObj(): Regional {
 		return {
 			Location: this.Location,
 			Awards: this.Awards,

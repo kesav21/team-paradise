@@ -3,6 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { DatePipe } from '@angular/common';
+
+
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from '../environments/environment';
@@ -38,7 +41,6 @@ import { DatabaseService } from './database-service/database.service';
 import { AuthService } from './auth-service/auth.service';
 
 import { ReversePipe } from './reverse-pipe/reverse.pipe';
-import { DatePipe } from './date-pipe/date.pipe';
 import { PeopleComponent } from './about/people/people.component';
 import { ObjectToStringPipe } from './object-to-string/object-to-string.pipe';
 
@@ -59,9 +61,8 @@ import { ObjectToStringPipe } from './object-to-string/object-to-string.pipe';
     ReversePipe,
     CompetitionDetailComponent,
     CompetitionListComponent,
-    DatePipe,
     PeopleComponent,
-    ObjectToStringPipe,
+    ObjectToStringPipe
   ],
   imports: [
     BrowserModule,

@@ -25,7 +25,6 @@ export * from './outreach/sponsorships/sponsorships.component';
 export * from './auth-service/auth.service';
 export * from './database-service/database.service';
 
-export * from './date-pipe/date.pipe';
 export * from './reverse-pipe/reverse.pipe';
 
 export * from './models';

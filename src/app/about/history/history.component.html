@@ -8,105 +8,104 @@
 
 	<div *ngIf="!auth.user">
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Year</th>
-				<th>Achievements</th>
-				<th>Game</th>
-				<th>Robot</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let Event of History | async | reverse">
-				<td>{{Event.Year}}</td>
-				<td>{{Event.Achievements}}</td>
-				<td><a href="{{Event.GameURL}}">{{Event.Game}}</a></td>
-				<td>{{Event.Robot}}</td>
-			</tr>
-		</tbody>
-	</table>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Year</th>
+					<th>Description</th>
+					<th>Game</th>
+					<th>Robot</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let Event of History$ | async | reverse">
+					<td>{{Event.Timestamp | date}}</td>
+					<td>{{Event.Description}}</td>
+					<td>
+						<a [href]="Event.GameURL">
+							{{Event.Game}}
+						</a>
+					</td>
+					<td>{{Event.Robot}}</td>
+				</tr>
+			</tbody>
+		</table>
 
 	</div>
 
 	<div *ngIf="auth.user">
 
-	<table class="table">
-		<thead>
-			<tr class="row">
-				<th class="col-1">Year</th>
-				<th class="col-6">Achievements</th>
-				<th class="col-2">Game</th>
-				<th class="col-2">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="row">
-				<td class="col-1">
-					<div class="form-group">
-						<input [(ngModel)]="newEvent.Year" placeholder="Year" class="form-control">
-					</div>
-				</td>
-				<td class="col-6">
-					<div class="form-group">
-						<textarea [(ngModel)]="newEvent.Achievements" placeholder="Achievements" class="form-control" rows="7">
-						</textarea>
-					</div>
-				</td>
-				<td class="col-3">
-					<div class="form-group">
-						<input [(ngModel)]="newEvent.GameURL" placeholder="Game URL" class="form-control">
-					</div>
-					<div class="form-group">
-						<input [(ngModel)]="newEvent.Game" placeholder="Game Name" class="form-control">
-					</div>
-					<div class="form-group">
-						<input [(ngModel)]="newEvent.Robot" placeholder="Robot Name" class="form-control">
-					</div>
-				</td>
-				<td class="col-1">
-					<button class="btn btn-outline-danger" (click)="addEvent();">
-						<i class="fa fa-lg fa-plus"></i>
-					</button>
-				</td>
-			</tr>
+		<table class="table">
+			<thead>
+				<tr class="row">
+					<th class="col-3">Year</th>
+					<th class="col-8">Description</th>
+					<th class="col-1">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="row">
+					<td class="col-3">
+						<div class="form-group">
+							<input type="date" [(ngModel)]="newEvent.Timestamp" placeholder="Year" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="text" [(ngModel)]="newEvent.GameURL" placeholder="Game URL" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="text" [(ngModel)]="newEvent.Game" placeholder="Game Name" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="text" [(ngModel)]="newEvent.Robot" placeholder="Robot Name" class="form-control">
+						</div>
+					</td>
+					<td class="col-8">
+						<div class="form-group">
+							<textarea [(ngModel)]="newEvent.Description" placeholder="Description" class="form-control" rows="7">
+							</textarea>
+						</div>
+					</td>
+					<td class="col-1">
+						<button class="btn btn-outline-danger" (click)="add();">
+							<i class="fa fa-lg fa-plus"></i>
+						</button>
+					</td>
+				</tr>
 
-			<tr *ngFor="let Event of History | async | reverse" class="row">
-				<td class="col-1">
-					<div class="form-group">
-						<input [(ngModel)]="Event.Year" class="form-control">
+				<tr *ngFor="let Event of History$ | async | reverse" class="row">
+					<td class="col-3">
+						<div class="form-group">
+							<input type="date" [(ngModel)]="Event.Timestamp" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="text" [(ngModel)]="Event.GameURL" placeholder="Game URL" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="text" [(ngModel)]="Event.Game" placeholder="Game" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="text" [(ngModel)]="Event.Robot"  placeholder="Robot"class="form-control">
+						</div>
+					</td>
+					<td class="col-8">
+						<div class="form-group">
+							<textarea [(ngModel)]="Event.Description" placeholder="Description" class="form-control" rows="7">
+							</textarea>
+						</div>
+					</td>
+					<td class="col-1">
+					<div class="btn-group-vertical">
+						<button class="btn btn-outline-danger" (click)="save(Event);">
+							<i class="fa fa-lg fa-save"></i>
+						</button>
+						<button class="btn btn-outline-danger" (click)="remove(Event.id);">
+							<i class="fa fa-lg fa-trash"></i>
+						</button>
 					</div>
-				</td>
-				<td class="col-6">
-					<div class="form-group">
-						<textarea [(ngModel)]="Event.Achievements" class="form-control" rows="7">
-						</textarea>
-					</div>
-				</td>
-				<td class="col-3">
-					<div class="form-group">
-						<input [(ngModel)]="Event.GameURL" class="form-control">
-					</div>
-					<div class="form-group">
-						<input [(ngModel)]="Event.Game" class="form-control">
-					</div>
-					<div class="form-group">
-						<input [(ngModel)]="Event.Robot" class="form-control">
-					</div>
-				</td>
-				<td class="col-1">
-				<div class="btn-group">
-					<button class="btn btn-outline-danger" (click)="save(Event);">
-						<i class="fa fa-lg fa-save"></i>
-					</button>
-					<button class="btn btn-outline-danger" (click)="remove(Event.$key);">
-						<i class="fa fa-lg fa-trash"></i>
-					</button>
-				</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
 	</div>
 

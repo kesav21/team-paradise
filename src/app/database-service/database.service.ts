@@ -17,7 +17,7 @@ import { Observable } from 'rxjs/Observable';
 import {
 	MainAnnc,
 	OtherAnnc,
-	History,
+	Event,
 	Officer,
 	Medium,
 	Competition,
@@ -85,7 +85,7 @@ export class DatabaseService {
 		return this.db.list('/Goals 2/');
 	}
 
-	getHistory(): FirebaseListObservable<History[]> {
+	getHistory(): FirebaseListObservable<Event[]> {
 		return this.db.list('/History/');
 	}
 
@@ -123,11 +123,19 @@ export class DatabaseService {
 	}
 
 	getCompetitions(): AngularFirestoreCollection<Competition> {
-		return this.fs.collection<Competition>('Competitions', (ref) => ref.orderBy('Year'));
+		return this.fs.collection<Competition>('Competitions');
 	}
 
 	getCompetition(year: string): AngularFirestoreDocument<Competition> {
 		return this.fs.doc<Competition>('Competitions/' + year);
+	}
+
+	getHistoryCol(): AngularFirestoreCollection<Event> {
+		return this.fs.collection<Event>('History', (ref) => ref.orderBy('Timestamp'));
+	}
+
+	getNewslettersCol(): AngularFirestoreCollection<Newsletter> {
+		return this.fs.collection<Newsletter>('Newsletters', (ref) => ref.orderBy('Timestamp'));
 	}
 
 
@@ -144,7 +152,7 @@ export class DatabaseService {
 	// getSnapshot<T extends Object, M extends T>(collection: AngularFirestoreCollection<T>): Observable<M[]> {
 	// 	return collection.snapshotChanges().map((actions) => {
 	// 		return actions.map((action) => {
-	// 			const data = action.payload.doc.data() as T;
+	// 			const data = action.payload.doc.data();
 	// 			const id: string = action.payload.doc.id;
 	// 			return { id, ...data };
 	// 		});
