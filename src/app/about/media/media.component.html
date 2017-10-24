@@ -1,0 +1,23 @@
+<div class="container">
+
+	<br>
+	<br>
+
+	<div *ngFor="let Folder of Media | async">
+
+		<div class="card mb-3">
+			<div class="card-header">
+				<h4 class="display-4">{{Folder.Year}}</h4>
+			</div>
+			<div class="list-group list-group-flush">
+				<div *ngFor="let collection of collections">
+					<a [routerLink]="[Folder.id, nameToString(collection)]" class="list-group-item list-group-item-action">
+						{{collection}}
+					</a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>

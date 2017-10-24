@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { DatePipe } from '@angular/common';
 
@@ -42,40 +43,45 @@ import { DatabaseService } from './database-service/database.service';
 import { AuthService } from './auth-service/auth.service';
 
 import { ReversePipe } from './reverse-pipe/reverse.pipe';
+import { MediaComponent } from './about/media/media.component';
+import { FolderComponent } from './about/media/folder/folder.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AboutTeamComponent,
-    GoalsComponent,
-    HistoryComponent,
-    ContactUsComponent,
-    FooterComponent,
-    HeaderComponent,
-    HomeComponent,
-    CalendarComponent,
-    NewslettersComponent,
-    ProjectsComponent,
-    SponsorshipsComponent,
-    ReversePipe,
-    CompetitionDetailComponent,
-    CompetitionListComponent,
-    PeopleComponent
-  ],
-  imports: [
-    BrowserModule,
-	FormsModule,
-	HttpModule,
-	AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
-	AngularFirestoreModule,
-    AngularFireDatabaseModule,
-    AngularFireAuthModule,
-  ],
-  providers: [
-	  DatabaseService,
-	  AuthService
-  ],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		AboutTeamComponent,
+		GoalsComponent,
+		HistoryComponent,
+		ContactUsComponent,
+		FooterComponent,
+		HeaderComponent,
+		HomeComponent,
+		CalendarComponent,
+		NewslettersComponent,
+		ProjectsComponent,
+		SponsorshipsComponent,
+		ReversePipe,
+		CompetitionDetailComponent,
+		CompetitionListComponent,
+		PeopleComponent,
+		MediaComponent,
+		FolderComponent
+	],
+	imports: [
+		BrowserModule,
+		FormsModule,
+		HttpModule,
+		HttpClientModule,
+		AppRoutingModule,
+		AngularFireModule.initializeApp(environment.firebase),
+		AngularFirestoreModule,
+		AngularFireDatabaseModule,
+		AngularFireAuthModule,
+	],
+	providers: [
+		DatabaseService,
+		AuthService
+	],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,30 @@
+<div class="container">
+
+	<br>
+
+	<nav aria-label="breadcrumb" role="navigation">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="about/media">Media</a></li>
+			<li class="breadcrumb-item active" aria-current="page">{{folder}}</li>
+		</ol>
+	</nav>
+
+	<br>
+
+	<h1 class="display-4">{{folder}}</h1>
+
+	<!-- <div *ngIf="!auth.user" class="row"> -->
+	<div class="row">
+		<div *ngFor="let Image of Folder | async">
+			<br>
+			<img [src]="Image.URL" alt="Image Error" height="200" class="img-responsive rounded">
+			<br>
+		</div>
+	</div>
+	<!-- </div> -->
+
+	<!-- <div *ngIf="auth.user">
+		<p>Logged in</p>
+	</div> -->
+
+</div>

@@ -15,7 +15,7 @@
 
 		<div class="card-group">
 
-			<div *ngFor="let Announcement of Main | async" class="card bg-warning text-white mb-5">
+			<div *ngFor="let Announcement of Announcements$ | async" class="card bg-warning text-white mb-5">
 				<div class="card-header">
 					<h3>{{Announcement.Title}}</h3>
 				</div>
@@ -32,21 +32,21 @@
 
 		<div class="card-group">
 
-			<div *ngFor="let Announcement of Main | async" class="card mb-5">
+			<div *ngFor="let Announcement of Announcements$ | async" class="card mb-5">
 				<div class="card-header">
-					<div class="form-group">
+					<div class="input-group">
 						<input [(ngModel)]="Announcement.Title" class="form-control">
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="saveAnnouncement(Announcement);">
+								<i class="fa fa-lg fa-save"></i>
+							</button>
+						</div>
 					</div>
 				</div>
 				<div class="card-body">
 					<div class="form-group">
 						<textarea [(ngModel)]="Announcement.Text" class="form-control" rows="10"></textarea>
 					</div>
-				</div>
-				<div class="card-footer">
-					<button class="btn btn-outline-danger" (click)="saveMain(Announcement);">
-						<i class="fa fa-lg fa-save"></i>
-					</button>
 				</div>
 			</div>
 
@@ -58,15 +58,15 @@
 
 	<div *ngIf="!auth.user">
 
-		<div *ngFor="let Announcement of Others | async; let index = index">
+		<div *ngFor="let Report of Reports$ | async">
 
-			<div class="card mb-4" [ngClass]="getCardColor(index)">
-				<div class="card-header text-white">
-					<h1 class="display-4">{{Announcement.Title}}</h1>
+			<div class="card mb-4">
+				<div class="card-header">
+					<h1 class="display-4">{{Report.Title}}</h1>
 				</div>
 				<ul class="list-group list-group-flush">
-					<li *ngFor="let Annc of Announcement.Text" class="list-group-item">
-						{{Annc.Text}}
+					<li *ngFor="let Annc of Report.Text" class="list-group-item">
+						{{Annc.Name}}
 					</li>
 				</ul>
 			</div>
@@ -77,36 +77,34 @@
 
 	<div *ngIf="auth.user">
 
-		<div *ngFor="let Announcement of Others | async; let index = index">
+		<div *ngFor="let Report of Reports$ | async">
 			<div class="card mb-4">
 				<div class="card-header">
-				<div class="row">
-					<div class="col-9 form-group">
-						<input type="text" [(ngModel)]="Announcement.Title" class="form-control">
-					</div>
-					<div class="col-3">
-					<div class="btn-group float-right">
-						<button class="btn btn-outline-danger" (click)="saveOther(Announcement);">
+				<div class="input-group">
+					<input type="text" [(ngModel)]="Report.Title" class="form-control">
+					<div class="input-group-btn">
+						<button class="btn btn-danger" (click)="saveReport(Report);">
 							<i class="fa fa-lg fa-save"></i>
 						</button>
-						<button class="btn btn-outline-danger" (click)="removeAnnouncement(Announcement);">
+					</div>
+					<div class="input-group-btn">
+						<button class="btn btn-danger" (click)="removeReport(Report);">
 							<i class="fa fa-lg fa-trash"></i>
 						</button>
-					</div>
 					</div>
 				</div>
 				</div>
 				<div class="card-body">
-					<div *ngFor="let Annc of Announcement.Text" class="row">
+					<div *ngFor="let Annc of Report.Text; trackBy: trackReport" class="row">
 						<div class="col-md-10 form-group">
-							<textarea [(ngModel)]="Annc.Text" class="form-control" rows="5"></textarea>
+							<textarea [(ngModel)]="Annc.Name" class="form-control" rows="5"></textarea>
 						</div>
 						<div class="col-2">
 						<div class="btn-group float-right">
-							<button class="btn btn-outline-danger" (click)="addAnnc(Announcement.Text, Annc);">
+							<button class="btn btn-danger" (click)="addAnnc(Report.Text, Annc);">
 								<i class="fa fa-lg fa-plus"></i>
 							</button>
-							<button class="btn btn-outline-danger" (click)="removeAnnc(Announcement.Text, Annc);">
+							<button class="btn btn-danger" (click)="removeAnnc(Report.Text, Annc);">
 								<i class="fa fa-lg fa-trash"></i>
 							</button>
 						</div>
@@ -124,30 +122,26 @@
 
 		<div class="card mb-3">
 			<div class="card-header form-control">
-				<div class="row">
-					<div class="col-11 form-group">
-						<input type="text" [(ngModel)]="newAnnouncement.Title" placeholder="Announcement Title" class="form-control">
-					</div>
-					<div class="col-1">
-					<div class="btn-group float-right">
-						<button class="btn btn-outline-danger float-right" (click)="addAnnouncement();">
-							<i class="fa fa-lg fa-trash"></i>
+				<div class="input-group">
+					<input type="text" [(ngModel)]="newReport.Title" placeholder="Announcement Title" class="form-control">
+					<div class="input-group-btn">
+						<button class="btn btn-danger float-right" (click)="addReport();">
+							<i class="fa fa-lg fa-plus"></i>
 						</button>
-					</div>
 					</div>
 				</div>
 			</div>
 			<div class="card-body">
-				<div *ngFor="let Annc of newAnnouncement.Text" class="row">
+				<div *ngFor="let Annc of newReport.Text" class="row">
 					<div class="col-md-10 form-group">
-						<textarea [(ngModel)]="Annc.Text" placeholder="Announcement Text" class="form-control" rows="5"></textarea>
+						<textarea [(ngModel)]="Annc.Name" placeholder="Announcement Text" class="form-control" rows="5"></textarea>
 					</div>
 					<div class="col-2">
 					<div class="btn-group float-right">
-						<button class="btn btn-outline-danger" (click)="addAnnc(newAnnouncement.Text, Annc);">
+						<button class="btn btn-danger" (click)="addAnnc(newReport.Text, Annc);">
 							<i class="fa fa-lg fa-plus"></i>
 						</button>
-						<button class="btn btn-outline-danger" (click)="removeAnnc(newAnnouncement.Text, Annc);">
+						<button class="btn btn-danger" (click)="removeAnnc(newReport.Text, Annc);">
 							<i class="fa fa-lg fa-trash"></i>
 						</button>
 					</div>

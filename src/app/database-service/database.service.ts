@@ -14,9 +14,11 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import {
-	MainAnnc,
-	OtherAnnc,
+	Announcement,
+	Report,
 	Event,
 	Officer,
 	Medium,
@@ -27,19 +29,21 @@ import {
 	Sponsor,
 	Tier,
 	Person,
+	Folder,
+	Image
 } from '../models';
 
 @Injectable()
 export class DatabaseService {
 
-	constructor(private db: AngularFireDatabase, private fs: AngularFirestore) {
+	constructor(private db: AngularFireDatabase, private fs: AngularFirestore, private http: HttpClient) {
 	}
 
-	getMainAnnouncements(): FirebaseListObservable<MainAnnc[]> {
+	getMainAnnouncements(): FirebaseListObservable<any[]> {
 		return this.db.list('/Announcements/Main');
 	}
 
-	getOtherAnnouncements(): FirebaseListObservable<OtherAnnc[]> {
+	getOtherAnnouncements(): FirebaseListObservable<any[]> {
 		return this.db.list('/Announcements/Others');
 	}
 
@@ -51,35 +55,6 @@ export class DatabaseService {
 	getSocialMedia(): FirebaseListObservable<Medium[]> {
 		return this.db.list('/Contact/Social Media');
 	}
-
-
-	// getCompetitions(): FirebaseListObservable<Competition[]> {
-	// 	return this.db.list('/Competitions');
-	// }
-	//
-	// getCompetition(year: string): FirebaseObjectObservable<Competition> {
-	// 	return this.db.object('/Competitions/' + year);
-	// }
-	//
-	// getCompetitionGame(year: string): FirebaseObjectObservable<any[]> {
-	// 	return this.db.object('/Competitions/' + year + '/Game');
-	// }
-	//
-	// getCompetitionRobot(year: string): FirebaseObjectObservable<any[]> {
-	// 	return this.db.object('/Competitions/' + year + '/Robot');
-	// }
-	//
-	// getCompetitionFacts(year: string): FirebaseListObservable<any[]> {
-	// 	return this.db.list('/Competitions/' + year + '/Robot/Facts');
-	// }
-	//
-	// getCompetitionAbilities(year: string): FirebaseListObservable<any[]> {
-	// 	return this.db.list('/Competitions/' + year + '/Robot/Abilities');
-	// }
-	//
-	// getCompetitionRegionals(year: string): FirebaseListObservable<any[]> {
-	// 	return this.db.list('/Competitions/' + year + '/Robot/Regionals');
-	// }
 
 	getGoals(): FirebaseListObservable<Goal[]> {
 		return this.db.list('/Goals 2/');
@@ -146,6 +121,29 @@ export class DatabaseService {
 		return this.fs.collection<Tier>('Tiers', (ref) => ref.orderBy('Bounds.Upper'));
 	}
 
+	getMedia(): AngularFirestoreCollection<Folder> {
+		return this.fs.collection<Folder>('Media');
+	}
+
+	getFolder(year: string, folder: string): AngularFirestoreCollection<Image> {
+		return this.fs.collection<Image>('Media/'+year+'/'+folder);
+	}
+
+	getSocialMediaCol(): AngularFirestoreCollection<Medium> {
+		return this.fs.collection<Medium>('Social Media');
+	}
+
+	getOfficerBoardCol(): AngularFirestoreCollection<Officer> {
+		return this.fs.collection<Officer>('Officer Board', (ref) => ref.orderBy('Position'));
+	}
+
+	getAnnouncements(): AngularFirestoreCollection<Announcement> {
+		return this.fs.collection<Announcement>('Announcements');
+	}
+
+	getReports(): AngularFirestoreCollection<Report> {
+		return this.fs.collection<Report>('Reports', (ref) => ref.orderBy('Timestamp'));
+	}
 
 	getSnapshot(collection) {
 		return collection.snapshotChanges().map((actions) => {
@@ -156,6 +154,36 @@ export class DatabaseService {
 			});
 		});
 	}
+
+	getSchoolYear(): string {
+		let date: Date = new Date();
+
+		let year: number = date.getFullYear();
+		let month: number = date.getMonth() + 1;
+
+		// if(month >= 9 && month <= 12) {
+		// 	return year;
+		// } if(month >= 1 && month <= 5) {
+		// 	return year - 1;
+		// }
+
+		if(month >= 9 && month <= 12) {
+			return year + '-' + (year + 1);
+		} if(month >= 1 && month <= 5) {
+			return (year - 1) + '-' + year;
+		}
+
+	}
+
+	// getSnapshot2(collection: AngularFirestoreCollection<any>): Observable<any> {
+	// 	return collection.snapshotChanges().map((actions) => {
+	// 		return actions.map((action) => {
+	// 			const data = action.payload.doc.data();
+	// 			const id: string = action.payload.doc.id;
+	// 			return { id, ...data };
+	// 		});
+	// 	});
+	// }
 
 	// getSnapshot<T extends Object, M extends T>(collection: AngularFirestoreCollection<T>): Observable<M[]> {
 	// 	return collection.snapshotChanges().map((actions) => {

@@ -63,7 +63,7 @@
 				<div class="card mb-3">
 					<img class="card-img-top" [src]="(CompetitionVar | async)?.Robot.Image" alt="Robot Image">
 					<div class="card-footer">
-						<a [href]="(CompetitionVar | async)?.Robot.Report" class="btn btn-outline-danger">
+						<a [href]="(CompetitionVar | async)?.Robot.Report" class="btn btn-danger">
 							View Robot Report
 						</a>
 					</div>
@@ -127,7 +127,7 @@
 					</div>
 					<div class="col-1">
 						<div class="btn-group">
-							<button class="btn btn-outline-danger" (click)="saveCompetition(year.value, gameName.value, gameReveal.value, gameDescription.value, robotImage.value, robotName.value, robotReport.value, robotReveal.value)">
+							<button class="btn btn-danger" (click)="saveCompetition(year.value, gameName.value, gameReveal.value, gameDescription.value, robotImage.value, robotName.value, robotReport.value, robotReveal.value)">
 								<i class="fa fa-lg fa-save"></i>
 							</button>
 						</div>
@@ -174,7 +174,7 @@
 					</div>
 					<div class="col-1">
 						<div class="btn-group">
-							<button class="btn btn-outline-danger" (click)="saveCompetition(year.value, gameName.value, gameReveal.value, gameDescription.value, robotImage.value, robotName.value, robotReport.value, robotReveal.value)">
+							<button class="btn btn-danger" (click)="saveCompetition(year.value, gameName.value, gameReveal.value, gameDescription.value, robotImage.value, robotName.value, robotReport.value, robotReveal.value)">
 								<i class="fa fa-lg fa-save"></i>
 							</button>
 						</div>
@@ -215,35 +215,30 @@
 				</div>
 				<ul class="list-group list-group-flush">
 					<li *ngFor="let Fact of Facts | async" class="list-group-item">
-						<div class="row">
-							<div class="form-group col-4">
-								<input type="text" [(ngModel)]="Fact.Key" class="form-control">
+						<div class="input-group">
+							<input type="text" [(ngModel)]="Fact.Key" class="form-control" placeholder="Key">
+							<span class="input-group-addon"></span>
+							<input type="text" [(ngModel)]="Fact.Value" class="form-control" placeholder="Value">
+							<div class="input-group-btn">
+								<button class="btn btn-danger" (click)="saveFact(Fact)">
+									<i class="fa fa-lg fa-save"></i>
+								</button>
 							</div>
-							<div class="form-group col-6">
-								<input type="text" [(ngModel)]="Fact.Value" class="form-control">
-							</div>
-							<div class="form-group col-2">
-								<div class="btn-group">
-									<button class="btn btn-outline-danger" (click)="saveFact(Fact)">
-										<i class="fa fa-lg fa-save"></i>
-									</button>
-									<button class="btn btn-outline-danger" (click)="removeFact(Fact.id);">
-										<i class="fa fa-lg fa-trash"></i>
-									</button>
-								</div>
+							<div class="input-group-btn">
+								<button class="btn btn-danger" (click)="removeFact(Fact.id);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
 							</div>
 						</div>
 					</li>
 					<li class="list-group-item">
-						<div class="row">
-							<div class="form-group col-4">
-								<input type="text" [(ngModel)]="newFact.Key" (keyup.enter)="addFact();" class="form-control">
-							</div>
-							<div class="form-group col-6">
-								<input type="text" [(ngModel)]="newFact.Value" (keyup.enter)="addFact();" class="form-control">
-							</div>
-							<div class="form-group col-2">
-								<button class="btn btn-outline-danger" (click)="addFact();">
+						<div class="input-group">
+							<span class="input-group-addon">New Fact</span>
+							<input type="text" [(ngModel)]="newFact.Key" (keyup.enter)="addFact();" class="form-control">
+							<span class="input-group-addon"></span>
+							<input type="text" [(ngModel)]="newFact.Value" (keyup.enter)="addFact();" class="form-control">
+							<div class="input-group-btn">
+								<button class="btn btn-danger" (click)="addFact();">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
 							</div>
@@ -260,30 +255,27 @@
 				</div>
 				<ul class="list-group list-group-flush">
 					<li *ngFor="let Ability of Abilities | async" class="list-group-item">
-						<div class="row">
-							<div class="form-group col-10">
-								<input type="text" [(ngModel)]="Ability.Name" class="form-control">
-							</div>
-							<div class="form-group col-2">
-								<div class="btn-group">
-									<button class="btn btn-outline-danger" (click)="saveAbility(Ability)">
-										<i class="fa fa-lg fa-save"></i>
-									</button>
-									<button class="btn btn-outline-danger" (click)="removeAbility(Ability.id);">
-										<i class="fa fa-lg fa-trash"></i>
-									</button>
-								</div>
-							</div>
+						<div class="input-group">
+							<input type="text" [(ngModel)]="Ability.Name" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="saveAbility(Ability)">
+									<i class="fa fa-lg fa-save"></i>
+								</button>
+							</span>
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="removeAbility(Ability.id);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
+							</span>
 						</div>
 					</li>
 
 					<li class="list-group-item">
-						<div class="row">
-							<div class="form-group col-10">
-								<input type="text" [(ngModel)]="newAbility.Name" (keyup.enter)="addAbility();" class="form-control">
-							</div>
-							<div class="form-group col-2">
-								<button class="btn btn-outline-danger" (keyup.enter)="addAbility();" (click)="addAbility();">
+						<div class="input-group">
+							<span class="input-group-addon">New Ability</span>
+							<input type="text" [(ngModel)]="newAbility.Name" (keyup.enter)="addAbility();" class="form-control">
+							<div class="input-group-btn">
+								<button class="btn btn-danger" (keyup.enter)="addAbility();" (click)="addAbility();">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
 							</div>
@@ -300,39 +292,34 @@
 				</div>
 				<ul class="list-group list-group-flush">
 					<li *ngFor="let Regional of Regionals | async" class="list-group-item">
-						<div class="row">
-							<div class="form-group col-4">
-								<input type="text" [(ngModel)]="Regional.Location" class="form-control">
-							</div>
-							<div class="form-group col-6">
-								<input type="text" [(ngModel)]="Regional.Awards" class="form-control">
-							</div>
-							<div class="form-group col-2">
-								<div class="btn-group">
-									<button class="btn btn-outline-danger" (click)="saveRegional(Regional)">
-										<i class="fa fa-lg fa-save"></i>
-									</button>
-									<button class="btn btn-outline-danger" (click)="removeRegional(Regional.id);">
-										<i class="fa fa-lg fa-trash"></i>
-									</button>
-								</div>
-							</div>
+						<div class="input-group">
+							<input type="text" [(ngModel)]="Regional.Location" class="form-control">
+							<span class="input-group-addon"></span>
+							<input type="text" [(ngModel)]="Regional.Awards" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="saveRegional(Regional)">
+									<i class="fa fa-lg fa-save"></i>
+								</button>
+							</span>
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="removeRegional(Regional.id);">
+									<i class="fa fa-lg fa-trash"></i>
+								</button>
+							</span>
 						</div>
 					</li>
 
 					<li class="list-group-item">
-						<div class="row">
-							<div class="form-group col-4">
-								<input type="text" [(ngModel)]="newRegional.Location" (keyup.enter)="addRegional();" class="form-control">
-							</div>
-							<div class="form-group col-6">
-								<input type="text"  [(ngModel)]="newRegional.Awards" (keyup.enter)="addRegional();" class="form-control">
-							</div>
-							<div class="form-group col-2">
-								<button class="btn btn-outline-danger" (click)="addRegional();">
+						<div class="input-group">
+							<span class="input-group-addon">New Regional</span>
+							<input type="text" [(ngModel)]="newRegional.Location" placeholder="Location" (keyup.enter)="addRegional();" class="form-control">
+							<span class="input-group-addon"></span>
+							<input type="text" [(ngModel)]="newRegional.Awards" placeholder="Awards" (keyup.enter)="addRegional();" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="addRegional();">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
-							</div>
+							</span>
 						</div>
 					</li>
 				</ul>
@@ -376,7 +363,7 @@
 				</div>
 				<div class="col-2">
 					<div class="btn-group">
-						<button class="btn btn-outline-danger" (click)="addCompetition()">
+						<button class="btn btn-danger" (click)="addCompetition()">
 							Add Competition
 						</button>
 					</div>
@@ -462,10 +449,10 @@
 						</div>
 						<div class="form-group col-2">
 							<div class="btn-group">
-								<button class="btn btn-outline-danger" (click)="addNewFact(Fact)">
+								<button class="btn btn-danger" (click)="addNewFact(Fact)">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
-								<button class="btn btn-outline-danger" (click)="removeNewFact(Fact);">
+								<button class="btn btn-danger" (click)="removeNewFact(Fact);">
 									<i class="fa fa-lg fa-trash"></i>
 								</button>
 							</div>
@@ -489,10 +476,10 @@
 						</div>
 						<div class="form-group col-2">
 							<div class="btn-group">
-								<button class="btn btn-outline-danger" (click)="addNewAbility(Ability)">
+								<button class="btn btn-danger" (click)="addNewAbility(Ability)">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
-								<button class="btn btn-outline-danger" (click)="removeNewAbility(Ability);">
+								<button class="btn btn-danger" (click)="removeNewAbility(Ability);">
 									<i class="fa fa-lg fa-trash"></i>
 								</button>
 							</div>
@@ -519,10 +506,10 @@
 						</div>
 						<div class="form-group col-2">
 							<div class="btn-group">
-								<button class="btn btn-outline-danger" (click)="addNewRegional(Regional)">
+								<button class="btn btn-danger" (click)="addNewRegional(Regional)">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
-								<button class="btn btn-outline-danger" (click)="removeNewRegional(Regional);">
+								<button class="btn btn-danger" (click)="removeNewRegional(Regional);">
 									<i class="fa fa-lg fa-trash"></i>
 								</button>
 							</div>

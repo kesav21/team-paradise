@@ -5,6 +5,8 @@ import { AboutTeamComponent } from './about/about-team/about-team.component';
 import { GoalsComponent } from './about/goals/goals.component';
 import { HistoryComponent } from './about/history/history.component';
 import { PeopleComponent } from './about/people/people.component';
+import { MediaComponent } from './about/media/media.component';
+import { FolderComponent } from './about/media/folder/folder.component';
 
 import { CompetitionDetailComponent } from './competitions/competition-detail/competition-detail.component';
 import { CompetitionListComponent } from './competitions/competition-list/competition-list.component';
@@ -36,12 +38,12 @@ const routes: Routes = [{
 	path: 'about/goals',
 	component: GoalsComponent
 }, {
-// 	path: 'about/media',
-// 	component: MediaComponent
-// }, {
-// 	path: 'about/media/:year',
-// 	component: YearComponent
-// }, {
+	path: 'about/media',
+	component: MediaComponent
+}, {
+	path: 'about/media/:year/:folder',
+	component: FolderComponent
+}, {
 // 	path: 'about/media/:year/folder/:folder',
 // 	component: FolderComponent
 // }, {

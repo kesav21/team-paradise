@@ -7,8 +7,8 @@
 
 		<div *ngFor="let Year of Goals | async | reverse; let index = index">
 
-			<div class="card mb-3" [ngClass]="getCardColor(index)">
-				<div class="card-header text-white">
+			<div class="card mb-3">
+				<div class="card-header">
 					<h4 class="card-title display-4">Team Goals {{Year.$key}}</h4>
 				</div>
 				<ul class="list-group list-group-flush">
@@ -29,63 +29,57 @@
 
 	<div *ngIf="auth.user">
 
-		<div *ngFor="let Year of Goals | async | reverse; let index = index">
+		<h1 class="display-4">Add New Goal</h1>
+
+		<br>
+
+		<div *ngIf="newGoal">
 
 			<div class="card mb-3">
 				<div class="card-header">
-				<div class="row">
-					<div class="col-10">
-						<h1 class="display-4">Team Goals {{Year.$key}}</h1>
-					</div>
-					<div class="col-2">
-					<div class="btn-group float-right">
-						<button class="btn btn-outline-danger" (click)="save(Year);">
-							<i class="fa fa-lg fa-save"></i>
+				<div class="input-group input-group-lg">
+					<span class="input-group-addon">Team Goals</span>
+					<input type="text" [(ngModel)]="newGoal.Term" placeholder="School Year" class="form-control">
+					<div class="input-group-btn">
+						<button class="btn btn-danger" (click)="add();">
+							<i class="fa fa-lg fa-plus"></i>
 						</button>
-						<button class="btn btn-outline-danger" (click)="remove(Year.$key);">
-							<i class="fa fa-lg fa-trash-o"></i>
-						</button>
-					</div>
 					</div>
 				</div>
 				</div>
 
 				<ul class="list-group list-group-flush">
-					<div *ngFor="let Goal of Year">
+					<div *ngFor="let Goal of newGoal.Goals;let i=index">
 						<li class="list-group-item">
-						<div class="row">
-							<div class="col-10">
-								<input type="text" [(ngModel)]="Goal.Text" class="form-control">
-							</div>
-							<div class="col-2">
-							<div class="btn-group float-right">
-								<button class="btn btn-outline-danger" (click)="addGoal(Year, Goal);">
+						<div class="input-group">
+							<span class="input-group-addon">{{i+1}}</span>
+							<input type="text" [(ngModel)]="Goal.Text" placeholder="New Goal" class="form-control">
+							<div class="input-group-btn">
+								<button class="btn btn-danger" (click)="addGoal(newGoal.Goals, Goal);">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
-								<button class="btn btn-outline-danger" (click)="removeGoal(Year, Goal);">
+								<button class="btn btn-danger" (click)="removeGoal(newGoal.Goals, Goal);">
 									<i class="fa fa-lg fa-trash-o"></i>
 								</button>
-							</div>
 							</div>
 						</div>
 						</li>
 
-						<div *ngFor="let SubGoal of Goal.SubGoals">
+						<div *ngFor="let SubGoal of Goal.SubGoals;let j=index">
 							<li class="list-group-item">
-							<div class="row">
-								<div class="col-1"></div>
-								<div class="form-group col-9">
-									<input type="text" [(ngModel)]="SubGoal.Text" class="form-control">
-								</div>
-								<div class="col-2">
-								<div class="btn-group float-right">
-									<button class="btn btn-outline-danger" (click)="addSubGoal(Goal.SubGoals, SubGoal);">
+							<div class="input-group">
+								<span class="input-group-addon">&ndash;</span>
+								<span class="input-group-addon">{{j+1}}</span>
+								<input type="text" [(ngModel)]="SubGoal.Text" placeholder="New Subgoal" class="form-control">
+								<div class="input-group-btn">
+									<button class="btn btn-danger" (click)="addSubGoal(Goal.SubGoals, SubGoal);">
 										<i class="fa fa-lg fa-plus"></i>
 									</button>
-									<button class="btn btn-outline-danger" (click)="removeSubGoal(Goal.SubGoals, SubGoal);">
+								</div>
+								<div class="input-group-btn">
+									<button class="btn btn-danger" (click)="removeSubGoal(Goal.SubGoals, SubGoal);">
 										<i class="fa fa-lg fa-trash-o"></i>
 									</button>
-								</div>
 								</div>
 							</div>
 							</li>
@@ -98,28 +92,21 @@
 
 		<hr>
 
-		<h1 class="display-4">Add New Goal</h1>
-
-		<br>
-
-		<div class="alert alert-warning" role="alert">
-			Enter the school year only (no spaces), and not the "Team Goals" part. Ex: {{year}}-{{year+1}}.
-		</div>
-
-		<br>
-
-		<div *ngIf="newGoal">
+		<div *ngFor="let Year of Goals | async | reverse; let index = index">
 
 			<div class="card mb-3">
 				<div class="card-header">
 				<div class="row">
 					<div class="col-10">
-						<input type="text" [(ngModel)]="newGoal.Term" placeholder="School Year" class="form-control">
+						<h1 class="display-4">Team Goals {{Year.$key}}</h1>
 					</div>
 					<div class="col-2">
 					<div class="btn-group float-right">
-						<button class="btn btn-outline-danger" (click)="add();">
-							<i class="fa fa-lg fa-plus"></i>
+						<button class="btn btn-danger" (click)="save(Year);">
+							<i class="fa fa-lg fa-save"></i>
+						</button>
+						<button class="btn btn-danger" (click)="remove(Year.$key);">
+							<i class="fa fa-lg fa-trash-o"></i>
 						</button>
 					</div>
 					</div>
@@ -127,42 +114,40 @@
 				</div>
 
 				<ul class="list-group list-group-flush">
-					<div *ngFor="let Goal of newGoal.Goals">
+					<div *ngFor="let Goal of Year; let i=index">
 						<li class="list-group-item">
-						<div class="row">
-							<div class="col-10">
-								<input type="text" [(ngModel)]="Goal.Text" placeholder="New Goal" class="form-control">
-							</div>
-							<div class="col-2">
-							<div class="btn-group float-right">
-								<button class="btn btn-outline-danger" (click)="addGoal(newGoal.Goals, Goal);">
+						<div class="input-group">
+							<span class="input-group-addon">{{i+1}}</span>
+							<input type="text" [(ngModel)]="Goal.Text" class="form-control">
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="addGoal(Year, Goal);">
 									<i class="fa fa-lg fa-plus"></i>
 								</button>
-								<button class="btn btn-outline-danger" (click)="removeGoal(newGoal.Goals, Goal);">
+							</span>
+							<span class="input-group-btn">
+								<button class="btn btn-danger" (click)="removeGoal(Year, Goal);">
 									<i class="fa fa-lg fa-trash-o"></i>
 								</button>
-							</div>
-							</div>
+							</span>
 						</div>
 						</li>
 
-						<div *ngFor="let SubGoal of Goal.SubGoals">
+						<div *ngFor="let SubGoal of Goal.SubGoals; let j=index">
 							<li class="list-group-item">
-							<div class="row">
-								<div class="col-1"></div>
-								<div class="form-group col-9">
-									<input type="text" [(ngModel)]="SubGoal.Text" placeholder="New SubGoal" class="form-control">
-								</div>
-								<div class="col-2">
-								<div class="btn-group float-right">
-									<button class="btn btn-outline-danger" (click)="addSubGoal(Goal.SubGoals, SubGoal);">
+							<div class="input-group">
+								<span class="input-group-addon">&ndash;</span>
+								<span class="input-group-addon">{{j+1}}</span>
+								<input type="text" [(ngModel)]="SubGoal.Text" class="form-control">
+								<span class="input-group-btn">
+									<button class="btn btn-danger" (click)="addSubGoal(Goal.SubGoals, SubGoal);">
 										<i class="fa fa-lg fa-plus"></i>
 									</button>
-									<button class="btn btn-outline-danger" (click)="removeSubGoal(Goal.SubGoals, SubGoal);">
+								</span>
+								<span class="input-group-btn">
+									<button class="btn btn-danger" (click)="removeSubGoal(Goal.SubGoals, SubGoal);">
 										<i class="fa fa-lg fa-trash-o"></i>
 									</button>
-								</div>
-								</div>
+								</span>
 							</div>
 							</li>
 						</div>

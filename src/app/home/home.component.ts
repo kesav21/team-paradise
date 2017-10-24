@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FirebaseListObservable } from 'angularfire2/database-deprecated';
+import { AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 
-import { AuthService } from '../auth-service/auth.service';
 import { DatabaseService } from '../database-service/database.service';
+import { AuthService } from '../auth-service/auth.service';
 
-import { MainAnnc, OtherAnnc } from '../models';
+import { Announcement, AnnouncementID, Report, ReportID } from '../models';
 
 @Component({
 	selector: 'app-home',
@@ -14,75 +15,52 @@ import { MainAnnc, OtherAnnc } from '../models';
 })
 export class HomeComponent implements OnInit {
 
-	Main: FirebaseListObservable<MainAnnc[]>;
-	Others: FirebaseListObservable<OtherAnnc[]>;
+	Announcements: AngularFirestoreCollection<Announcement>;
+	Announcements$: Observable<Announcement[]>;
 
-	newAnnouncement: OtherAnnc;
+	Reports: AngularFirestoreCollection<Report>;
+	Reports$: Observable<Report[]>;
 
-	colors: string[] = [
-		'bg-primary',
-		'bg-secondary',
-		'bg-success',
-		'bg-danger',
-		'bg-warning',
-		'bg-info',
-		'bg-dark'
-	];
+	newReport: Report;
 
 	constructor(public auth: AuthService, private db: DatabaseService) {
 	}
 
 	ngOnInit() {
-		this.Main = this.db.getMainAnnouncements();
-		this.Others = this.db.getOtherAnnouncements();
+		this.Announcements = this.db.getAnnouncements();
+		this.Reports = this.db.getReports();
+
+		this.Announcements$ = this.db.getSnapshot(this.Announcements);
+		this.Reports$ = this.db.getSnapshot(this.Reports);
 
 		this.resetNewAnnouncement();
-		this.colors = this.shuffleColors(this.colors);
 	}
 
-	saveMain(Announcement: any): void {
-		// this.Main.update(Announcement.$key, Announcement);
+	saveAnnouncement(Announcement: AnnouncementID): void {
+		const k = this.Announcements.doc(Announcement.id);
+		delete Announcement.id;
+		k.update(Announcement);
 	}
 
-	saveOther(Announcement: any): void {
-		// this.Others.update(Announcement.$key, Announcement);
+	saveReport(Report: ReportID): void {
+		const k = this.Reports.doc(Report.id);
+		delete Report.id;
+		k.update(Report);
 	}
 
-	addAnnouncement(): void {
-		// this.Others.push({
-		// 	Title: this.newAnnouncement.Title,
-		// 	Text: this.newAnnouncement.Text
-		// });
+	addReport(): void {
+		this.newReport.Timestamp = new Date();
+		this.Reports.add(this.newReport);
 		this.resetNewAnnouncement();
 	}
 
-	removeAnnouncement(key): void {
-		// key?
-		// 	this.Others.remove(key):
-		// 	console.log('Announcement key is null.')
-	}
-
-	/**
-	 * Randomize array element order in-place.
-	 * Using Durstenfeld shuffle algorithm.
-	 */
-	shuffleColors(array: string[]): string[] {
-	    for (let i: number = array.length - 1; i > 0; i--) {
-	        let j: number = Math.floor(Math.random() * (i + 1));
-	        let temp: string = array[i];
-	        array[i] = array[j];
-	        array[j] = temp;
-	    }
-	    return array;
-	}
-
-	getCardColor(index: number): string {
-		return this.colors[index % this.colors.length];
+	removeReport(key: string): void {
+		this.Reports.doc(key).delete();
 	}
 
 	addAnnc(Text: any[], Annc: any): void {
 		Text.splice(Text.indexOf(Annc) + 1, 0, {
-			Text: ''
+			Name: ''
 		});
 	}
 
@@ -90,14 +68,17 @@ export class HomeComponent implements OnInit {
 		Text.splice(Text.indexOf(Annc), 1);
 	}
 
+	trackReport(index: number, report: string): number {
+		return index;
+	}
+
 	resetNewAnnouncement(): void {
-		this.newAnnouncement = {
+		this.newReport = {
 			Title: '',
 			Text: [{
-				Text: ''
-			}, {
-				Text: ''
-			}]
+				Name: ''
+			}],
+			Timestamp: null
 		};
 	}
 

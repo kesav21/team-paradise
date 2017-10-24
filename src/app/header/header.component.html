@@ -21,12 +21,12 @@
 		</ul>
 		<span class="navbar-text">
 			<div *ngIf="!auth.user">
-				<button class="nav-link btn btn-outline-danger" (click)="login();">
+				<button class="nav-link btn btn-danger" (click)="login();">
 					Login
 				</button>
 			</div>
 			<div *ngIf="auth.user">
-				<button class="nav-link btn btn-outline-danger" (click)="logout();">
+				<button class="nav-link btn btn-danger" (click)="logout();">
 					Logout
 				</button>
 			</div>
@@ -68,12 +68,12 @@
 
 		<div>
 			<div *ngIf="!auth.user">
-				<button class="nav-link btn btn-outline-danger" (click)="login();">
+				<button class="nav-link btn btn-danger" (click)="login();">
 					Login
 				</button>
 			</div>
 			<div *ngIf="auth.user">
-				<button class="nav-link btn btn-outline-danger" (click)="logout();">
+				<button class="nav-link btn btn-danger" (click)="logout();">
 					Logout
 				</button>
 			</div>

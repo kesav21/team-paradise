@@ -17,10 +17,10 @@
 						</div>
 						<div class="col-3">
 						<div class="btn-group float-right">
-							<a class="btn btn-outline-danger" routerLink="/competitions/new">
+							<a class="btn btn-danger" routerLink="/competitions/new">
 								<i class="fa fa-lg fa-plus"></i>
 							</a>
-							<button class="btn btn-outline-danger" (click)="removeCompetition(Competition.id);">
+							<button class="btn btn-danger" (click)="removeCompetition(Competition.id);">
 								<i class="fa fa-lg fa-trash"></i>
 							</button>
 						</div>
@@ -33,7 +33,7 @@
 					<div class="col-9">
 						<p class="card-text">{{Competition.Game.Description}}</p>
 						<div class="text-right">
-							<a [routerLink]="['/competitions', Competition.id]" class="btn btn-outline-danger">
+							<a [routerLink]="['/competitions', Competition.id]" class="btn btn-danger">
 								Read More
 							</a>
 						</div>

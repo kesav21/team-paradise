@@ -4,6 +4,7 @@ export * from './contact';
 export * from './goal';
 export * from './history';
 export * from './home';
+export * from './media';
 export * from './newsletter';
 export * from './project';
 export * from './sponsorship';

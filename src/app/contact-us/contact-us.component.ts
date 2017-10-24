@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FirebaseListObservable } from 'angularfire2/database-deprecated';
+import { AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 
-import { AuthService } from '../auth-service/auth.service';
 import { DatabaseService } from '../database-service/database.service';
+import { AuthService } from '../auth-service/auth.service';
 
+import { Medium, MediumID, Officer, OfficerID } from '../models';
 @Component({
   selector: 'app-contact-us',
   templateUrl: './contact-us.component.html',
@@ -12,51 +14,52 @@ import { DatabaseService } from '../database-service/database.service';
 })
 export class ContactUsComponent implements OnInit {
 
-	SocialMedia: FirebaseListObservable<any[]>;
-	OfficerBoard: FirebaseListObservable<any[]>;
+	Media: AngularFirestoreCollection<Medium>;
+	Media$: Observable<MediumID[]>;
 
-	year: number;
+	Board: AngularFirestoreCollection<Officer>;
+	Board$: Observable<OfficerID[]>;
 
-	newMedia: {
-		Name: string;
-		URL: string;
-		Text: string;
-	};
+	year: string;
+
+	newMedia: Medium;
 
 	constructor(public auth: AuthService, private db: DatabaseService) {
 	}
 
 	ngOnInit() {
-		this.SocialMedia = this.db.getSocialMedia();
-		this.OfficerBoard = this.db.getOfficerBoard();
+		this.Media = this.db.getSocialMediaCol();
+		this.Media$ = this.db.getSnapshot(this.Media);
 
-		this.year = new Date().getFullYear();
+		this.Board = this.db.getOfficerBoardCol();
+		this.Board$ = this.db.getSnapshot(this.Board);
+
+		this.year = this.db.getSchoolYear();
 
 		this.resetNewMedia();
 	}
 
-
 	addMedia() {
 		if(this.newMedia.Name !== '' && this.newMedia.Text !== '' && this.newMedia.URL !== '') {
-			this.SocialMedia.update(this.newMedia.Name, {
-				Text: this.newMedia.Text,
-				URL: this.newMedia.URL
-			});
+			this.Media.add(this.newMedia);
+			this.resetNewMedia();
 		}
 	}
 
-	saveMedia(Media: any) {
-		this.SocialMedia.update(Media.$key, Media);
+	saveMedia(Medium: MediumID) {
+		const k = this.Media.doc(Medium.id)
+		delete Medium.id;
+		k.update(Medium);
 	}
 
-	removeMedia(key: any) {
-		key?
-			this.SocialMedia.remove(key):
-			console.log('Media key is null.');
+	removeMedia(id: string) {
+		this.Media.doc(id).delete();
 	}
 
-	saveOfficer(Officer: any) {
-		this.OfficerBoard.update(Officer.$key, Officer);
+	saveOfficer(Officer: OfficerID) {
+		const k = this.Board.doc(Officer.id)
+		delete Officer.id;
+		k.update(Officer);
 	}
 
 	resetNewMedia() {

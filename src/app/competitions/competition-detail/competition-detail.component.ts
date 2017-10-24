@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../../auth-service/auth.service';
 import { DatabaseService } from '../../database-service/database.service';
 
-
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -55,8 +54,7 @@ export class CompetitionDetailComponent implements OnInit {
 		public auth: AuthService,
 		private db: DatabaseService,
 		private route: ActivatedRoute,
-		private location: Location
-	) {}
+		private location: Location) {}
 
 	ngOnInit(): void {
 		this.route.params.subscribe((params: Params) => {
