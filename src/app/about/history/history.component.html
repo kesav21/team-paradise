@@ -10,23 +10,21 @@
 
 		<table class="table">
 			<thead>
-				<tr>
-					<th>Year</th>
-					<th>Description</th>
-					<th>Game</th>
-					<th>Robot</th>
+				<tr class="row">
+					<th class="col-2">Game</th>
+					<th class="col-10">Description</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let Event of History$ | async | reverse">
-					<td>{{Event.Timestamp | date}}</td>
-					<td>{{Event.Description}}</td>
-					<td>
+				<tr *ngFor="let Event of History$ | async | reverse" class="row">
+					<td class="col-2">
+						{{Event.Timestamp | date}}
 						<a [href]="Event.GameURL">
 							{{Event.Game}}
 						</a>
+						{{Event.Robot}}
 					</td>
-					<td>{{Event.Robot}}</td>
+					<td class="col-10">{{Event.Description}}</td>
 				</tr>
 			</tbody>
 		</table>
