@@ -25,7 +25,7 @@ export class AuthService {
 	}];
 
 	constructor(private af: AngularFireAuth, private db: DatabaseService) {
-		this.OfficerBoard = db.getOfficerBoardFirestore();
+		this.OfficerBoard = db.getOfficerBoard();
 
 		this.getUser();
 	}

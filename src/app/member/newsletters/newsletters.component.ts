@@ -23,7 +23,7 @@ export class NewslettersComponent implements OnInit {
 	constructor(public auth: AuthService, private db: DatabaseService) {}
 
 	ngOnInit() {
-		this.Newsletters = this.db.getNewslettersCol();
+		this.Newsletters = this.db.getNewsletters();
 		this.Newsletters$ = this.db.getSnapshot(this.Newsletters);
 		this.newNewsletter = new NewsletterObj();
 	}

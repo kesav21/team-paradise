@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AboutTeamComponent } from './about/about-team/about-team.component';
-import { GoalsComponent } from './about/goals/goals.component';
+// import { GoalsComponent } from './about/goals/goals.component';
 import { HistoryComponent } from './about/history/history.component';
 import { PeopleComponent } from './about/people/people.component';
 import { MediaComponent } from './about/media/media.component';
@@ -34,9 +34,9 @@ const routes: Routes = [{
 }, {
 	path: 'about/history',
 	component: HistoryComponent
-}, {
-	path: 'about/goals',
-	component: GoalsComponent
+// }, {
+// 	path: 'about/goals',
+// 	component: GoalsComponent
 }, {
 	path: 'about/media',
 	component: MediaComponent

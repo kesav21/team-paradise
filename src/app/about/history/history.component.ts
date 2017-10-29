@@ -25,7 +25,7 @@ export class HistoryComponent implements OnInit {
 	constructor(public auth: AuthService, private db: DatabaseService) {}
 
 	ngOnInit() {
-		this.History = this.db.getHistoryCol();
+		this.History = this.db.getHistory();
 		this.History$ = this.db.getSnapshot(this.History);
 		this.newEvent = new EventObj();
 	}

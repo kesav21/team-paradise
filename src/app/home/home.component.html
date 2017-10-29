@@ -1,4 +1,4 @@
-<div class="jumbotron text-center">
+<div class="jumbotron jumbotron-fluid text-center">
 	<h1 class="text-white font-weight-bold display-1">Building Better</h1>
 	<h1 class="text-white font-weight-bold display-2">People</h1>
 	<br>
@@ -11,11 +11,22 @@
 
 <div class="container">
 
+	<hr>
+
+	<p class="lead">
+		<b>Team Paradise 1165</b> is a group of high school kids who love to build robots!
+		We design, build, program, and test amazing creation to compete in the FIRST Robotics Challenges.
+		We also focus on reaching out to our community to share the wonders of science and technology.
+		Our goal is to grow the individual not only in knowledge but also in character.
+	</p>
+
+	<hr>
+
 	<div *ngIf="!auth.user">
 
 		<div class="card-group">
 
-			<div *ngFor="let Announcement of Announcements$ | async" class="card bg-warning text-white mb-5">
+			<div *ngFor="let Announcement of Announcements$ | async" class="card">
 				<div class="card-header">
 					<h3>{{Announcement.Title}}</h3>
 				</div>
@@ -32,7 +43,7 @@
 
 		<div class="card-group">
 
-			<div *ngFor="let Announcement of Announcements$ | async" class="card mb-5">
+			<div *ngFor="let Announcement of Announcements$ | async" class="card">
 				<div class="card-header">
 					<div class="input-group">
 						<input [(ngModel)]="Announcement.Title" class="form-control">
@@ -54,102 +65,46 @@
 
 	</div>
 
-	<br>
+	<!-- <hr>
 
-	<div *ngIf="!auth.user">
-
-		<div *ngFor="let Report of Reports$ | async">
-
-			<div class="card mb-4">
-				<div class="card-header">
-					<h1 class="display-4">{{Report.Title}}</h1>
-				</div>
-				<ul class="list-group list-group-flush">
-					<li *ngFor="let Annc of Report.Text" class="list-group-item">
-						{{Annc.Name}}
-					</li>
-				</ul>
+	<div id="carousel" class="carousel slide" data-ride="carousel">
+		<div class="carousel-inner">
+			<div *ngFor="let robot of robots; let first = first" class="carousel-item" [class.active]="first">
+				<img class="d-block w-100" [src]="robot.url" [alt]="robot.name" height="200" width="100">
 			</div>
-
+			<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="sr-only">Previous</span>
+			</a>
+			<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="sr-only">Next</span>
+			</a>
 		</div>
-
 	</div>
 
-	<div *ngIf="auth.user">
+	<hr>
 
-		<div *ngFor="let Report of Reports$ | async">
-			<div class="card mb-4">
-				<div class="card-header">
-				<div class="input-group">
-					<input type="text" [(ngModel)]="Report.Title" class="form-control">
-					<div class="input-group-btn">
-						<button class="btn btn-danger" (click)="saveReport(Report);">
-							<i class="fa fa-lg fa-save"></i>
-						</button>
-					</div>
-					<div class="input-group-btn">
-						<button class="btn btn-danger" (click)="removeReport(Report);">
-							<i class="fa fa-lg fa-trash"></i>
-						</button>
-					</div>
-				</div>
-				</div>
-				<div class="card-body">
-					<div *ngFor="let Annc of Report.Text; trackBy: trackReport" class="row">
-						<div class="col-md-10 form-group">
-							<textarea [(ngModel)]="Annc.Name" class="form-control" rows="5"></textarea>
-						</div>
-						<div class="col-2">
-						<div class="btn-group float-right">
-							<button class="btn btn-danger" (click)="addAnnc(Report.Text, Annc);">
-								<i class="fa fa-lg fa-plus"></i>
-							</button>
-							<button class="btn btn-danger" (click)="removeAnnc(Report.Text, Annc);">
-								<i class="fa fa-lg fa-trash"></i>
-							</button>
-						</div>
-						</div>
-					</div>
-				</div>
-			</div>
+	<div class="row">
+		<div *ngFor="let robot of robots" class="col">
+			<a [href]="robot.url" class="text-primary">
+				<img [src]="robot.url" height="100" width="100%">
+				{{robot.name}}
+			</a>
 		</div>
-
-		<hr>
-
-		<h1 class="display-4">Add New Announcement</h1>
-
-		<br>
-
-		<div class="card mb-3">
-			<div class="card-header form-control">
-				<div class="input-group">
-					<input type="text" [(ngModel)]="newReport.Title" placeholder="Announcement Title" class="form-control">
-					<div class="input-group-btn">
-						<button class="btn btn-danger float-right" (click)="addReport();">
-							<i class="fa fa-lg fa-plus"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="card-body">
-				<div *ngFor="let Annc of newReport.Text" class="row">
-					<div class="col-md-10 form-group">
-						<textarea [(ngModel)]="Annc.Name" placeholder="Announcement Text" class="form-control" rows="5"></textarea>
-					</div>
-					<div class="col-2">
-					<div class="btn-group float-right">
-						<button class="btn btn-danger" (click)="addAnnc(newReport.Text, Annc);">
-							<i class="fa fa-lg fa-plus"></i>
-						</button>
-						<button class="btn btn-danger" (click)="removeAnnc(newReport.Text, Annc);">
-							<i class="fa fa-lg fa-trash"></i>
-						</button>
-					</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</div>
+
+	<hr>
+
+	<div class="row">
+		<div *ngFor="let Robot of Robots$ | async | reverse" class="col">
+			<a [href]="Robot.Robot.Image" class="text-primary">
+				<img [src]="Robot.Robot.Image" height="100" width="100%">
+				{{Robot.Robot.Name}}
+			</a>
+		</div>
+	</div>
+
+	<hr> -->
 
 </div>

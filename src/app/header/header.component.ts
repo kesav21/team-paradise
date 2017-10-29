@@ -28,9 +28,9 @@ export class HeaderComponent implements OnInit {
 		}, {
 			url: '/about/history',
 			name: 'History'
-		}, {
-			url: '/about/goals',
-			name: 'Our Goals'
+		// }, {
+		// 	url: '/about/goals',
+		// 	name: 'Our Goals'
 		}, {
 			url: '/about/media',
 			name: 'Media'
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit {
 		name: 'Contact us'
 	}];
 
-	constructor(private auth: AuthService) {
+	constructor(public auth: AuthService) {
 	}
 
 	ngOnInit(): void {

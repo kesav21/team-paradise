@@ -28,10 +28,10 @@ export class ContactUsComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.Media = this.db.getSocialMediaCol();
+		this.Media = this.db.getSocialMedia();
 		this.Media$ = this.db.getSnapshot(this.Media);
 
-		this.Board = this.db.getOfficerBoardCol();
+		this.Board = this.db.getOfficerBoard();
 		this.Board$ = this.db.getSnapshot(this.Board);
 
 		this.year = this.db.getSchoolYear();

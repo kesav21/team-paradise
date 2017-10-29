@@ -33,7 +33,7 @@ export class SponsorshipsComponent implements OnInit {
 
 	ngOnInit() {
 		this.Tiers = this.db.getTiers();
-		this.Sponsors = this.db.getSponsorsCol();
+		this.Sponsors = this.db.getSponsors();
 
 		this.Tiers$ = this.db.getSnapshot(this.Tiers);
 		this.Sponsors$ = this.db.getSnapshot(this.Sponsors);
