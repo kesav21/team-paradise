@@ -7,7 +7,6 @@ import { DatabaseService } from '../../../database-service/database.service';
 import { AuthService } from '../../../auth-service/auth.service';
 
 import { ActivatedRoute, Params } from '@angular/router';
-import { Location } from '@angular/common';
 
 import { Folder, Image, FolderID, ImageID } from '../../../models';
 
@@ -18,80 +17,65 @@ import { Folder, Image, FolderID, ImageID } from '../../../models';
 })
 export class FolderComponent implements OnInit {
 
-	FolderCollection: AngularFirestoreCollection<Image>;
-	Folder: Observable<ImageID[]>;
+	Folder: AngularFirestoreCollection<Image>;
+	Folder$: Observable<ImageID[]>;
 
+	year: string;
 	folder: string;
 
-	// images: string[] = [
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBYi0zNzczMTNzSE0&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBRWFjSkhIaXN3WWc&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBczRCd3g3bzJBZnM&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBdTk5eHBjYmtNSDA&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBdFc1UTk1X2J0Yk0&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBQkhzcE54NlU4ZnM&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBNzJsQXJNMnVuM0U&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBeFRSSXhpQ1dsRFU&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBRmFmSEJvYW45VXc&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBOHNGWFNncER0MDQ&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBeXRzYnk2ZXJMTGs&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBZXR2TFFWWE5aUjg&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBRnEyZkRkUkRSbjA&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBdVF5NDFLR3FGM1U&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBcndXcm1qWTRkbmc&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBUWI1WGwtTExQSTQ&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBRnM1ZWRBMzhNUUk&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBQU9vOXRQakpWZ28&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBOEFCVExmci0yXzA&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBMEthNDJFLVVVMUE&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBNnphSTdKeUZLQXM&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBNVEtc2Rib2dlYzQ&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBcXR4SDBpLW1Wa2M&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBUi0xei1xdkl3cE0&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBQ0kzcVp1QkhsMmc&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBQXV4Qjl2TUdZTEk&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBblFvSVMza1FUdm8&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBS2F5RVdiWWF5S28&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBRWNLZjZidGQ3Q3M&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBN1YydFpLcnFPY1k&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBTXlOUmdpTU5DQTg&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBZllDZjZ5cFdoUUk&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBT2QzejhfYk1rT1E&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBdGJoZDVRSzdCWEE&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBbjBYaXRLQ0Q0SlU&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBYjBuSHFBYmZ0T0k&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBeVJMdjg0WTEzX28&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBeHpxdm5GRzhaUFE&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBeEc4ZlJFM1U2T0k&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBTlJOUC16ZzlXRVE&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBUTNQWE85bGM1Sjg&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBSWFQNFRnZ0cyUFk&export=view',
-	// 	'https://drive.google.com/uc?id=0B67XEk2kI6cBN0tfUXhjMTcyUjA&export=view'
-	// ];
+	newImage: string = '';
+	newImages: string = '';
 
-	constructor(
-		public auth: AuthService,
-		private db: DatabaseService,
-		private route: ActivatedRoute,
-		private location: Location) { }
+	constructor(public auth: AuthService, private db: DatabaseService, private route: ActivatedRoute) {
+	}
 
 	ngOnInit() {
 		this.route.params.subscribe((params: Params) => {
-			this.FolderCollection = this.db.getFolder(params.year, this.stringToName(params.folder));
-			this.Folder = this.db.getSnapshot(this.FolderCollection);
+			this.Folder = this.db.getFolder(params.id, this.toName(params.folder));
+			this.Folder$ = this.db.getSnapshot(this.Folder);
 
-			this.folder = this.stringToName(params.folder);
-
-			// this.images.forEach((url: string) => {
-			// 	this.FolderCollection.add({
-			// 		URL: url,
-			// 		Timestamp: new Date()
-			// 	});
-			// });
-		})
+			this.year = params.id;
+			this.folder = this.toName(params.folder);
+		});
 	}
 
-	stringToName(folder: string): string {
+	// getID(Image: ImageID): string {
+	// 	const k = Image.id;
+	// 	delete Image.id;
+	// 	return k;
+	// }
+
+	saveImage(Image: ImageID) {
+		const id = Image.id;
+		delete Image.id;
+		this.Folder.doc(id).update(Image);
+	}
+
+	removeImage(Image: ImageID) {
+		this.Folder.doc(Image.id).delete();
+	}
+
+	addImage() {
+		this.Folder.add({
+			URL: this.newImage,
+			Timestamp: new Date()
+		});
+		this.newImage = '';
+	}
+
+	addImages() {
+		let images = this.newImages.split('\n');
+		images.forEach((image: string) => {
+			// image = image.split(' ')[1].replace('download', 'view');
+			this.Folder.add({
+				URL: image,
+				Timestamp: new Date()
+			});
+		});
+		this.newImages = '';
+	}
+
+	toName(folder: string): string {
 		return folder.split('-').join(' ');
 	}
 

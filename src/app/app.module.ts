@@ -19,7 +19,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AppComponent } from './app.component';
 
 import { AboutTeamComponent } from './about/about-team/about-team.component';
-// import { GoalsComponent } from './about/goals/goals.component';
 import { HistoryComponent } from './about/history/history.component';
 import { PeopleComponent } from './about/people/people.component';
 
@@ -50,7 +49,6 @@ import { FolderComponent } from './about/media/folder/folder.component';
 	declarations: [
 		AppComponent,
 		AboutTeamComponent,
-		// GoalsComponent,
 		HistoryComponent,
 		ContactUsComponent,
 		FooterComponent,

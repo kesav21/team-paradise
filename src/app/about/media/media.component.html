@@ -3,19 +3,102 @@
 	<br>
 	<br>
 
-	<div *ngFor="let Folder of Media | async">
+	<div *ngIf="!auth.user">
 
-		<div class="card mb-3">
-			<div class="card-header">
-				<h4 class="display-4">{{Folder.Year}}</h4>
-			</div>
-			<div class="list-group list-group-flush">
-				<div *ngFor="let collection of collections">
-					<a [routerLink]="[Folder.id, nameToString(collection)]" class="list-group-item list-group-item-action">
-						{{collection}}
-					</a>
+		<div *ngFor="let Folder of Media$ | async">
+			<div class="card mb-3">
+				<div class="card-header">
+					<h4 class="display-4">{{Folder.Year}}</h4>
+				</div>
+				<div class="list-group list-group-flush">
+					<div *ngFor="let Collection of Folder.Collections">
+						<a [routerLink]="[Folder.id, toRoute(Collection)]" class="list-group-item list-group-item-action">
+							{{Collection}}
+						</a>
+					</div>
 				</div>
 			</div>
+		</div>
+
+	</div>
+
+	<div *ngIf="auth.user">
+
+		<div *ngFor="let Folder of Media$ | async">
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="input-group">
+						<span class="input-group-addon">{{Folder.id}}</span>
+						<input type="text" [(ngModel)]="Folder.Game" class="form-control">
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="saveFolder(Folder)">
+								<i class="fa fa-lg fa-save"></i>
+							</button>
+						</div>
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="removeFolder(Folder.id)">
+								<i class="fa fa-lg fa-trash-o"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li *ngFor="let Collection of Folder.Collections" class="list-group-item">
+						<div class="input-group">
+						<input type="text" [ngModel]="Collection" class="form-control" disabled="true">
+							<div class="input-group-btn">
+								<a class="btn btn-danger" [routerLink]="[Folder.id, toRoute(Collection)]">
+									<i class="fa fa-lg fa-arrow-right"></i>
+								</a>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="input-group">
+							<input type="text" #collection class="form-control">
+							<div class="input-group-btn">
+								<button class="btn btn-danger" (click)="addCollection(Folder, collection.value)">
+									<i class="fa fa-lg fa-plus"></i>
+								</button>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">
+				<div class="input-group">
+					<span class="input-group-addon">Year: </span>
+					<input type="text" [(ngModel)]="newFolder.Year" class="form-control">
+					<span class="input-group-addon">Game: </span>
+					<input type="text" [(ngModel)]="newFolder.Game" class="form-control">
+					<div class="input-group-btn">
+						<button class="btn btn-danger" (click)="addFolder()">
+							<i class="fa fa-lg fa-plus"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li *ngFor="let Collection of newFolder.Collections; let i=index; trackBy: track" class="list-group-item">
+					<div class="input-group">
+						<input type="text" [(ngModel)]="newFolder.Collections[i]" class="form-control">
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="addNewCollection(Collection)">
+								<i class="fa fa-lg fa-plus"></i>
+							</button>
+						</div>
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="removeNewCollection(Collection);">
+								<i class="fa fa-lg fa-trash"></i>
+							</button>
+						</div>
+					</div>
+				</li>
+			</ul>
 		</div>
 
 	</div>

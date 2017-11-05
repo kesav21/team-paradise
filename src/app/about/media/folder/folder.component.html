@@ -5,26 +5,80 @@
 	<nav aria-label="breadcrumb" role="navigation">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a href="about/media">Media</a></li>
+			<li class="breadcrumb-item">{{year}}</li>
 			<li class="breadcrumb-item active" aria-current="page">{{folder}}</li>
 		</ol>
 	</nav>
 
 	<br>
 
-	<h1 class="display-4">{{folder}}</h1>
+	<div *ngIf="!auth.user" class="row">
+		<h1 class="display-4">{{folder}}</h1>
 
-	<!-- <div *ngIf="!auth.user" class="row"> -->
-	<div class="row">
-		<div *ngFor="let Image of Folder | async">
-			<br>
-			<img [src]="Image.URL" alt="Image Error" height="200" class="img-responsive rounded">
-			<br>
+		<div class="row">
+			<div *ngFor="let Image of Folder$ | async">
+				<a [href]="Image.URL" target="_blank">
+					<img [src]="Image.URL" alt="Image Error" height="200" class="img-responsive border border-danger rounded">
+				</a>
+			</div>
 		</div>
 	</div>
-	<!-- </div> -->
 
-	<!-- <div *ngIf="auth.user">
-		<p>Logged in</p>
-	</div> -->
+	<div *ngIf="auth.user">
+
+		<div class="card">
+			<div class="card-header">
+				<h1 class="display-4">{{folder}}</h1>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li *ngFor="let Image of Folder$ | async" class="list-group-item">
+					<div class="input-group">
+						<input type="text" [(ngModel)]="Image.URL" class="form-control">
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="saveImage(Image)">
+								<i class="fa fa-lg fa-save"></i>
+							</button>
+						</div>
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="removeImage(Image);">
+								<i class="fa fa-lg fa-trash"></i>
+							</button>
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item">
+					<div class="input-group">
+						<input type="text" [(ngModel)]="newImage" class="form-control">
+						<div class="input-group-btn">
+							<button class="btn btn-danger" (click)="addImage()">
+								<i class="fa fa-lg fa-plus"></i>
+							</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<br>
+
+		<div class="card">
+			<div class="card-header">
+				<div class="row">
+					<div class="col-8">
+						<h1>Add Images in Bulk</h1>
+					</div>
+					<div class="col-4 float-right">
+						<button class="btn btn-danger" (click)="addImages()">
+							Add all Images
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<textarea [(ngModel)]="newImages" class="form-control" rows="15"></textarea>
+			</div>
+		</div>
+
+	</div>
 
 </div>

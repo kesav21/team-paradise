@@ -1,6 +1,5 @@
 
 export * from './about/about-team/about-team.component';
-export * from './about/goals/goals.component';
 export * from './about/history/history.component';
 export * from './about/people/people.component';
 

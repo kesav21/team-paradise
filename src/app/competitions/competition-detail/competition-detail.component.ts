@@ -166,7 +166,6 @@ export class CompetitionDetailComponent implements OnInit {
 			this.newFacts.forEach((Fact: FactObj) => facts.add(Fact.getObj()));
 			this.newRegionals.forEach((Regional: RegionalObj) => regionals.add(Regional.getObj()));
 		});
-
 	}
 
 	addNewFact(newFact: FactObj) {

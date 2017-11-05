@@ -21,7 +21,12 @@ import {
 	Event,
 	Officer,
 	Medium,
+
 	Competition,
+	Ability,
+	Fact,
+	Regional,
+
 	Goal,
 	Newsletter,
 	Project,
@@ -54,13 +59,27 @@ export class DatabaseService {
 		return this.fs.collection<Person>('People')
 	}
 
+
 	getCompetitions(): AngularFirestoreCollection<Competition> {
 		return this.fs.collection<Competition>('Competitions', (ref) => ref.orderBy('Year'));
 	}
 
-	getCompetition(year: string): AngularFirestoreDocument<Competition> {
+	getCompetition(year: number): AngularFirestoreDocument<Competition> {
 		return this.fs.doc<Competition>('Competitions/' + year);
 	}
+
+	getAbilities(year: number): AngularFirestoreCollection<Ability> {
+		return this.getCompetition(year).collection<Ability>('Abilities', (ref) => ref.orderBy('Timestamp'));
+	}
+
+	getFacts(year: number): AngularFirestoreCollection<Ability> {
+		return this.getCompetition(year).collection<Ability>('Facts', (ref) => ref.orderBy('Timestamp'));
+	}
+
+	getRegionals(year: number): AngularFirestoreCollection<Ability> {
+		return this.getCompetition(year).collection<Ability>('Regionals', (ref) => ref.orderBy('Timestamp'));
+	}
+
 
 	getHistory(): AngularFirestoreCollection<Event> {
 		return this.fs.collection<Event>('History', (ref) => ref.orderBy('Timestamp'));
@@ -82,8 +101,8 @@ export class DatabaseService {
 		return this.fs.collection<Folder>('Media');
 	}
 
-	getFolder(year: string, folder: string): AngularFirestoreCollection<Image> {
-		return this.fs.collection<Image>('Media/'+year+'/'+folder);
+	getFolder(id: string, folder: string): AngularFirestoreCollection<Image> {
+		return this.fs.collection<Image>('Media/' + id + '/' + folder, (ref) => ref.orderBy('Timestamp'));
 	}
 
 	getSocialMedia(): AngularFirestoreCollection<Medium> {
@@ -114,18 +133,13 @@ export class DatabaseService {
 		let year: number = date.getFullYear();
 		let month: number = date.getMonth() + 1;
 
-		// if(month >= 9 && month <= 12) {
-		// 	return year;
-		// } if(month >= 1 && month <= 5) {
-		// 	return year - 1;
-		// }
-
 		if(month >= 9 && month <= 12) {
+			// return year;
 			return year + '-' + (year + 1);
 		} if(month >= 1 && month <= 5) {
+			// return year - 1;
 			return (year - 1) + '-' + year;
 		}
-
 	}
 
 	// getSnapshot2(collection: AngularFirestoreCollection<any>): Observable<any> {
